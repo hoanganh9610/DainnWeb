@@ -1,0 +1,94 @@
+.fonts-property-editor button {
+  padding: 5px 15px;
+}
+
+.fonts-property-editor button[disabled] span {
+  color: #d8d7d9;
+}
+
+.fonts-property-editor button:hover {
+  background-color: transparent;
+}
+
+.fonts-property-editor .umb-button {
+  margin-left: 0;
+}
+
+.fonts-property-editor .umb-block-list__block--actions {
+  opacity: 0;
+  padding-inline: 0;
+  right: 35px;
+  top: 5px;
+  transition: opacity 0.12s;
+}
+
+.fonts-property-editor .umb-block-list__block--actions .action {
+  line-height: 10px;
+}
+
+.fonts-property-editor .accordion-heading {
+  position: relative;
+}
+
+.fonts-property-editor .accordion-heading:hover .umb-block-list__block--actions {
+  opacity: 1;
+}
+
+.fonts-property-editor .input-append .add-on {
+  cursor: auto;
+  box-sizing: border-box;
+  height: 32px;
+  line-height: 15px;
+  min-width: 32px;
+  color: inherit;
+  background: #f7f7f7;
+  transition: border 0.2s linear;
+}
+
+.fonts-property-editor .input-append .add-on:hover {
+  border-color: #d8d7d9;
+  color: inherit;
+}
+
+.fonts-property-editor .input-append input:focus + .add-on {
+  border-color: #bbbabf;
+}
+
+.fonts-property-editor .input-append input:focus {
+  border-right: 1px solid #d8d7d9;
+}
+
+.fonts-property-editor .preview-label {
+  border-color: rgba(28, 38, 79, 0.1);
+  border-style: solid;
+  border-width: 0 0 1px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.fonts-property-editor .colour-content div:not(:first-child) > .preview-label {
+  margin-top: 25px;
+}
+
+.fonts-property-editor .colour-content a.btn-primary {
+  --bs-btn-color: inherit;
+  --bs-btn-bg: inherit;
+  --bs-btn-border-color: inherit;
+  --bs-btn-hover-color: inherit;
+  --bs-btn-hover-bg: inherit;
+  --bs-btn-hover-border-color: inherit;
+  --bs-btn-font-weight: inherit;
+  --bs-btn-border-radius: inherit;
+  box-shadow: none;
+}
+
+.fonts-property-editor .colour-content a.btn-sm {
+  --bs-border-radius-sm: inherit;
+}
+
+.fonts-property-editor .colour-content a.btn-lg {
+  --bs-border-radius-lg: inherit;
+}

@@ -1,0 +1,25 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;
+@{
+    var icon = Model as MediaWithCrops;
+
+    if (icon == null) { return; }
+
+    var type = @icon.GetProperty("umbracoExtension")?.GetValue();
+
+    <link rel="apple-touch-icon" sizes="57x57" href="@icon.GetCropUrl(width: 57, height: 57)" />
+    <link rel="apple-touch-icon" sizes="72x72" href="@icon.GetCropUrl(width: 72, height: 72)" />
+    <link rel="apple-touch-icon" sizes="114x114" href="@icon.GetCropUrl(width: 114, height: 114)" />
+    <link rel="apple-touch-icon" sizes="128x128" href="@icon.GetCropUrl(width: 128, height: 128)" />
+    <link rel="apple-touch-icon" sizes="144x144" href="@icon.GetCropUrl(width: 144, height: 144)" />
+    <link rel="apple-touch-icon" sizes="152x152" href="@icon.GetCropUrl(width: 152, height: 152)" />
+    <link rel="apple-touch-icon" sizes="167x167" href="@icon.GetCropUrl(width: 167, height: 167)" />
+    <link rel="apple-touch-icon" sizes="180x180" href="@icon.GetCropUrl(width: 180, height: 180)" />
+    <link rel="icon" type="image/@type" href="@icon.GetCropUrl(width: 16, height: 16)" sizes="16x16" />
+    <link rel="icon" type="image/@type" href="@icon.GetCropUrl(width: 32, height: 32)" sizes="32x32" />
+    <link rel="icon" type="image/@type" href="@icon.GetCropUrl(width: 48, height: 48)" sizes="48x48" />
+    <link rel="icon" type="image/@type" href="@icon.GetCropUrl(width: 192, height: 192)" sizes="192x192" />
+    <meta name="msapplication-square70x70logo" content="@icon.GetCropUrl(width: 70, height: 70)" />
+    <meta name="msapplication-square150x150logo" content="@icon.GetCropUrl(width: 150, height: 150)" />
+    <meta name="msapplication-square310x310logo" content="@icon.GetCropUrl(width: 310, height: 310)" />
+}

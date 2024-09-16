@@ -1,0 +1,33 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<TeamMemberBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+    var image = Model.Content.Image;
+}
+<div class="card-member d-flex flex-column align-items-center text-center h-100 @(noBackgroundColor ? "nobackgroundcolor" : "p-7")" style="background-color: #@(backgroundColor)" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    <div class="img-holder mb-4 overflow-hidden">
+        @if (image != null)
+        {
+            var altText = image.Value<string>("altText");
+            if (string.IsNullOrWhiteSpace(altText))
+            {
+                altText = image.Name;
+            }
+            <img class="image w-100 h-100 object-fit-cover" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 312, height: 240)" title="@altText" alt="@altText" />
+        }
+        @* else
+        {
+        <img class="image w-100 object-fit-cover" style="transform: scale(0.9);" src="@Url.Content("~/img/default_team_member_transparent.png").GetCropUrl(imageCropMode: ImageCropMode.Min, width: Model.ColumnSpan < 6 ? 420 : 650)" title="Default Team Member Image" alt="Default Team Member Image" />
+        } *@
+    </div>
+    <p class="card-title fw-medium mb-1">@Model.Content.EmployeeName</p>
+    <p class="lead-sm mb-0">@Model.Content.EmployeePosition</p>
+</div>

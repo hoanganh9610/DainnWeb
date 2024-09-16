@@ -1,0 +1,38 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<AccordionBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+    var uniqueId = "accordion-" + Model?.Content?.Key ?? Guid.NewGuid().ToString();
+}
+<div class="accordion @(noBackgroundColor ? "nobackgroundcolor" : "with-bg")" id="@uniqueId" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    @{
+        var items = Model?.Content?.Items?.Select(x => x.Content).OfType<AccordionItem>().ToList();
+        @for (int i = 0; i < items?.Count; i++)
+        {
+            <div class="accordion-item">
+                <p class="accordion-header">
+                    <span class="accordion-button shadow-none @(i == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@uniqueId-collapse-@i" aria-expanded="@(i == 0 ? "true" : "false")" aria-controls="@uniqueId-collapse-@i">
+                        <span class="accordion-counter">@((i + 1).ToString("D2"))</span>
+                        @items[i].Headline
+                        <span class="accordion-arrow">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </span>
+                </p>
+                <div id="@uniqueId-collapse-@i" class="accordion-collapse collapse @(i == 0 ? "show" : "")" data-bs-parent="#@uniqueId">
+                    <div class="accordion-body lead-sm">@items[i].RichText</div>
+                </div>
+            </div>
+        }
+    }
+</div>

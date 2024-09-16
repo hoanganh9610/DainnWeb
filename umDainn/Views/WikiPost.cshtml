@@ -1,0 +1,529 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.PublishedCache
+@using Umbraco.Cms.Core.Strings
+@using Umbraco.Cms.Web.Common.PublishedModels
+@using Microsoft.Extensions.Configuration
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BewikiPost>
+@inject IConfiguration _configuration
+@{
+    Layout = "Layout.cshtml";
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+    var design = Umbraco.AssignedContentItem.AncestorsOrSelf<BlockGrid>()
+    .OrderByDescending(x => x.Level)
+    .FirstOrDefault(x => x.OverrideDesign != null)?.OverrideDesign as Design
+    ?? (isMultisiteSetup
+    ? Umbraco.AssignedContentItem.Root().Descendant<DesignFolder>()?.SelectedDesign
+    : (Umbraco.ContentAtRoot()
+    .FirstOrDefault(x => x.ContentType.Alias.InvariantEquals("designFolder")) as DesignFolder)?.SelectedDesign) as Design;
+    ViewData["Design"] = design;
+    var wikiPage = Model?.Ancestor<BewikiPage>();
+    var allPosts = wikiPage?.Children<BewikiPost>() ?? Enumerable.Empty<IPublishedContent>();
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(wikiPage?.BackgroundColor) && (design?.BaselineColors?.Background.TryGetValue(wikiPage?.BackgroundColor!, out var backgroundValue) ?? false))
+    {
+        backgroundColor = backgroundValue;
+    }
+    var contrast = wikiPage?.Contrast;
+    var navRight = wikiPage?.NavigationMenuFromRightSide ?? false;
+    var dividerColor = string.Empty;
+    if (!string.IsNullOrEmpty(wikiPage?.DividerColor) && (design?.BaselineColors?.Background.TryGetValue(wikiPage?.DividerColor!, out var dividerValue) ?? false))
+    {
+        dividerColor = dividerValue;
+    }
+    var hoverColor = string.Empty;
+    if (!string.IsNullOrEmpty(wikiPage?.HoverColor) && (design?.BaselineColors?.Background.TryGetValue(wikiPage?.HoverColor!, out var hoverValue) ?? false))
+    {
+        hoverColor = hoverValue;
+    }
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    body {
+        height: auto;
+        --bs-border-color: #@dividerColor;
+        --bs-link-hover-color-rgb: #@hoverColor;
+    }
+
+    .border-bottom {
+        border-color: var(--bs-border-color);
+    }
+
+    .container {
+        max-width: 1440px;
+    }
+
+    .stickMenu {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 88px;
+        background: #@backgroundColor;
+    }
+
+    @@media(max-width: 992px) {
+        .stickMenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transform: translateX(100%);
+            transition: 0.3s;
+            z-index: 1021;
+        }
+
+        .stickMenu .list-group {
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        .wiki-menu-opened {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .wiki-menu-opened .stickMenu {
+            transform: translateX(0);
+        }
+    }
+
+    .collapsibleScroll {
+        padding: 0;
+        list-style: none;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+    }
+
+    @@media(min-width:992px) {
+        .collapsibleScroll {
+            height: calc(100vh - 160px);
+        }
+    }
+
+    .collapsibleScroll::-webkit-scrollbar {
+        background: transparent;
+        width: 8px;
+        height: 8px;
+    }
+
+    .collapsibleScroll::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 8px;
+    }
+
+    @@media(min-width:992px) {
+        .collapsibleScroll:hover::-webkit-scrollbar {
+            background-color: color-mix(in srgb, black, transparent calc(100% - 100%* .04));
+        }
+
+        .collapsibleScroll:hover::-webkit-scrollbar-thumb {
+            background-color: color-mix(in srgb, black, transparent calc(100% - 100%* .16));
+        }
+    }
+
+    @@media(max-width:992px) {
+        .collapsibleScroll::-webkit-scrollbar {
+            background-color: color-mix(in srgb, black, transparent calc(100% - 100%* .04));
+        }
+
+        .collapsibleScroll::-webkit-scrollbar-thumb {
+            background-color: color-mix(in srgb, black, transparent calc(100% - 100%* .16));
+        }
+    }
+
+    .collapsible a {
+        position: relative;
+        z-index: 2;
+        display: block;
+        padding: 5px 20px 5px 10px;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .collapsible a:hover {
+        text-decoration: none;
+    @(string.IsNullOrEmpty(hoverColor) ? "background:rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,0.1));" : $"background:#{hoverColor}1F;")
+    }
+
+    .collapsible,
+    .collapsible ol,
+    .collapsible ul {
+        list-style-type: none;
+    }
+
+    .collapsible {
+        margin: 0;
+    }
+
+    .collapsible li {
+        position: relative;
+    }
+
+    .collapsible ol,
+    .collapsible ul {
+        display: none;
+    }
+
+    .toggle {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        z-index: 3;
+        color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+        transition: 0.3s;
+    }
+
+    .toggle:hover {
+        background: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 0.2));
+    }
+
+    .toggle svg {
+        transition: 0.3s;
+    }
+
+    .toggle.open svg {
+        transform: rotate(90deg);
+    }
+
+    .activeWiki {
+        text-decoration: none;
+        --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+    }
+
+    .list-group {
+        margin-left: -10px;
+    }
+
+    .collapsible ul {
+        margin-top: 5px;
+        margin-left: 10px;
+        padding: 0;
+        border-left: solid 1px;
+        border-color: var(--bs-border-color);
+    }
+
+    .page-nav-btn {
+        width: 100%;
+        max-width: 330px;
+        --bs-border-color: #@dividerColor;
+        --bs-link-hover-color-rgb: #@hoverColor;
+    }
+
+    @@media(max-width: 992px) {
+        .page-nav-btn {
+            max-width: 100%;
+        }
+    }
+
+    .page_blog[blog-bright-contrast] .page-nav-btn {
+        --bs-border-color: white;
+    }
+
+    .page-nav-btn svg {
+        color: var(--bs-border-color);
+    }
+
+    .page-nav-btn:hover svg {
+        color: var(--bs-link-hover-color-rgb);
+    }
+
+    .page-nav-btn:hover div div {
+        color: var(--bs-link-hover-color-rgb);
+    }
+
+    .page-nav-btn:hover {
+        border: solid 1px var(--bs-link-hover-color-rgb) !important;
+    }
+</style>
+<div @(contrast == "ffffff" ? $"blog-bright-contrast" : "") class="page_blog pt-3 pt-md-5 pb-5" style="@(string.IsNullOrEmpty(backgroundColor) ? "" : $"background: #{backgroundColor};")">
+    <div class="container">
+        <div class="row gx-xxl-5">
+            @if (!navRight)
+            {
+                <div class="col-lg-3">
+                    <div class="stickMenu">
+                        @if (!string.IsNullOrEmpty(wikiPage?.MenuTitle))
+                        {
+                            <h4 class="h4 pb-3 mb-3 border-bottom contrast-support" style="@(string.IsNullOrEmpty(dividerColor) ? "" : $"border-color: #{dividerColor} !important;")">@wikiPage?.MenuTitle</h4>
+                        }
+                        <a href="#closeWikiNav" class="d-flex align-items-center justify-content-center position-absolute d-lg-none" style="top: 25px; right: 20px; width: 25px; height: 25px; border: solid 1px var(--bs-border-color); color: var(--bs-border-color);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                            </svg>
+                        </a>
+                        <div class="list-group mb-0 mb-lg-4">
+                            <ul class="collapsible collapsibleScroll">
+                                <li>
+                                    <a id="@wikiPage?.Id" class="contrast-support" href="@wikiPage?.Url()">@wikiPage?.ContentNamePage</a>
+                                </li>
+                                @foreach (var post in allPosts)
+                                {
+                                    @await Html.PartialAsync("wikiPagination", post)
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-lg-9">
+                <div>
+                    <a class="page-nav-btn d-lg-none d-inline-flex align-items-center border p-3 contrast-support text-decoration-none mw-100 mb-3" href="#openWikiNav">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                        </svg>
+                        <div>
+                            <div>Wiki menu</div>
+                        </div>
+                    </a>
+                    <div>
+                        <div class="container"><h1 class="contrast-support">@Model?.Name</h1></div>
+                        <div>@await Html.GetBlockGridHtmlAsync(Model?.Content)</div>
+                        <div class="mb-4 pt-3 border-bottom" style="@(string.IsNullOrEmpty(dividerColor) ? "" : $"border-color: #{dividerColor} !important;")"></div>
+                    </div>
+                </div>
+                <div class="d-lg-flex justify-content-between mb-3" style="gap: 30px;">
+                    <a class="page-nav-btn d-inline-flex align-items-center border p-3 contrast-support text-decoration-none" href="javascript:void(0);">
+                        <svg id="prevChapterSvg" style="margin-left: -0.5rem;display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="me-start flex-shrink-0">
+                            <path d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z" fill="currentColor" />
+                        </svg>
+                        <div class="flex-grow-1 text-end">
+                            <small>Previous</small>
+                            <div id="prevChapter"></div>
+                        </div>
+                    </a>
+                    <a class="page-nav-btn d-inline-flex align-items-center border p-3 contrast-support text-decoration-none mt-2 mt-lg-0" href="javascript:void(0);">
+                        <div>
+                            <small>Next</small>
+                            <div id="nextChapter"></div>
+                        </div>
+                        <svg id="nextChapterSvg" style="margin-right: -0.5rem;display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="ms-auto flex-shrink-0">
+                            <path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z" fill="currentColor" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            @if (navRight)
+            {
+                <div class="col-lg-4">
+                    <div class="stickMenu">
+                        @if (!string.IsNullOrEmpty(wikiPage?.MenuTitle))
+                        {
+                            <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Wiki</h4>
+                        }
+                        <a href="#closeWikiNav" class="d-flex align-items-center justify-content-center position-absolute d-lg-none" style="top: 25px; right: 20px; width: 25px; height: 25px; border: solid 1px var(--bs-border-color); color: var(--bs-border-color);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                            </svg>
+                        </a>
+                        <div class="list-group mb-0 mb-lg-4">
+                            <ul class="collapsible collapsibleScroll">
+                                <li>
+                                    <a id="@wikiPage?.Id" class="contrast-support" href="@wikiPage?.Url()">@wikiPage?.ContentNamePage</a>
+                                </li>
+                                @foreach (var post in allPosts)
+                                {
+                                    @await Html.PartialAsync("wikiPagination", post)
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        function updSwiperNumericPagination() {
+            document.querySelector('#slides-counter').innerHTML = (this.realIndex + 1) + '/' + (this.snapGrid.length);
+        }
+
+        const swiper = new Swiper('.blog-swiper-1', {
+            initialSlide: 0,
+            watchSlidesProgress: true,
+            watchSlidesVisibility: true,
+
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 23,
+                },
+            },
+        });
+
+        window.addEventListener("load", () => {
+            const btnOpenWikiMobileMenu = document.querySelector('[href="#openWikiNav"]');
+            const btnCloseWikiMobileMenu = document.querySelector('[href="#closeWikiNav"]');
+
+            if (btnOpenWikiMobileMenu) {
+                btnOpenWikiMobileMenu.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    if (document.body.classList.contains('wiki-menu-opened')) {
+                        document.body.classList.remove('wiki-menu-opened')
+                    } else {
+                        document.body.classList.add('wiki-menu-opened');
+                    }
+                });
+            }
+
+            if (btnCloseWikiMobileMenu) {
+                btnCloseWikiMobileMenu.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    document.body.classList.remove('wiki-menu-opened')
+                });
+            }
+
+            for (let i of document.querySelectorAll(".collapsible ol, .collapsible ul")) {
+                let t = document.createElement("div");
+                t.innerHTML =
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" style="@(string.IsNullOrEmpty(dividerColor) ? "" : $"color: #{dividerColor};")" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.6.0 by @@fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc. --><path d="M299.3 244.7c6.2 6.2 6.2 16.4 0 22.6l-192 192c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6L265.4 256 84.7 75.3c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0l192 192z" fill="currentColor"/></svg>`;
+                t.className = "toggle";
+
+                t.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.toggle("open");
+
+
+                    let nextSibling = this.closest('a').nextElementSibling;
+                    if (nextSibling && (nextSibling.tagName === "OL" || nextSibling.tagName === "UL")) {
+                        if (this.classList.contains("open")) {
+                            nextSibling.style.display = "block";
+                        } else {
+                            nextSibling.style.display = "none";
+                        }
+                    }
+                };
+
+                i.previousElementSibling.appendChild(t)
+            }
+
+            let currentPostLink = $('#@Model.Id');
+            let parentLi = currentPostLink.parent().parent().parent();
+            OpenAllToggles(parentLi);
+            currentPostLink.addClass('activeWiki');
+            let allLinks = $('.collapsible').find('a');
+
+            for (let i = 0; i < allLinks.length; i++) {
+                if ($(allLinks[i]).attr('id') == @Model.Id) {
+                    if (i > 0) {
+                        $('#prevChapter').text($(allLinks[i - 1]).text());
+                        $('#prevChapter').parent().parent().attr('href', $(allLinks[i - 1]).attr('href'));
+                        $('#prevChapterSvg').show();
+                    } else {
+                        $('#prevChapter').parent().parent().attr('style', 'display: none !important;');
+                        $('#nextChapter').parent().parent().addClass('mw-100');
+                    }
+
+                    if ((i + 1) < allLinks.length) {
+                        $('#nextChapter').text($(allLinks[i + 1]).text());
+                        $('#nextChapter').parent().parent().attr('href', $(allLinks[i + 1]).attr('href'));
+                        $('#nextChapterSvg').show();
+                    } else {
+                        $('#nextChapter').parent().parent().attr('style', 'display: none !important;');
+                        $('#prevChapter').parent().parent().addClass('mw-100');
+                    }
+
+                    i = allLinks.length;
+                }
+            }
+
+
+
+            function scrollToActiveLink() {
+                const container = document.querySelector('.collapsibleScroll');
+                const activeElement = container.querySelector('.activeWiki');
+
+                setTimeout(() => {
+                    if (activeElement) {
+                        const containerRect = container.getBoundingClientRect();
+
+
+
+
+                        function expandParentsFromActive(element) {
+                            let currentElement = element;
+
+
+                            while (currentElement) {
+                                const parentLi = currentElement.closest('li');
+                                if (!parentLi) break;
+
+
+                                const toggle = parentLi.querySelector('.toggle');
+                                if (toggle) {
+                                    toggle.classList.add('open');
+                                }
+
+                                const nextUl = parentLi.querySelector('ul');
+                                if (nextUl) {
+                                    nextUl.style.display = 'block';
+                                }
+
+                                currentElement = parentLi.parentElement.closest('li');
+
+
+                                const nextParentLi = parentLi.parentElement.closest('li');
+                                if (!nextParentLi) {
+                                    parentLi.classList.add('last-element-action');
+                                    const lastElementRect = parentLi.getBoundingClientRect();
+                                    const scrollTop = lastElementRect.top - containerRect.top + container.scrollTop;
+
+                                    container.scrollTo({
+                                        top: scrollTop,
+                                        behavior: 'smooth'
+                                    });
+                                }
+
+                                currentElement = nextParentLi;
+                            }
+                        }
+                        expandParentsFromActive(activeElement);
+
+                    }
+                }, 100);
+            }
+
+            document.addEventListener('DOMContentLoaded', scrollToActiveLink());
+
+        });
+
+        function OpenAllToggles(li) {
+            if (li && li.length > 0) {
+                li.children('.toggle').first().addClass('open');
+                let parentLi = $(li).parent().parent();
+                OpenAllToggles(parentLi);
+            }
+        }
+
+
+
+
+
+    </script>
+</div>

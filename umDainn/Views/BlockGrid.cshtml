@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.BlockGrid>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _configuration
+@{
+    Layout = "Layout.cshtml";
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+
+    var design = Umbraco.AssignedContentItem.AncestorsOrSelf<BlockGrid>()
+            .OrderByDescending(x => x.Level)
+            .FirstOrDefault(x => x.OverrideDesign != null)?.OverrideDesign as Design
+            ?? (isMultisiteSetup
+                ? Umbraco.AssignedContentItem.Root().Descendant<DesignFolder>()?.SelectedDesign
+                : (Umbraco.ContentAtRoot()
+                    .FirstOrDefault(x => x.ContentType.Alias.InvariantEquals("designFolder")) as DesignFolder)?.SelectedDesign) as Design;
+
+    ViewData["Design"] = design;
+}
+
+@await Html.GetBlockGridHtmlAsync(Model.Content)

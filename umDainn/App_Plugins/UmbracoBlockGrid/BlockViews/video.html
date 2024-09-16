@@ -1,0 +1,44 @@
+<style>
+    :host {
+        min-height: 160px;
+    }
+
+    .video-container {
+        cursor: pointer;
+    }
+
+    .file-name {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+        padding: 3px 6px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        opacity: var(--umb-block-grid--block-ui-opacity, 0);
+        transition: opacity 120ms;
+    }
+
+    .video-container video {
+        width: 100%;
+        aspect-ratio: 16/8;
+        object-fit: cover;
+    }
+
+    @media(max-width:575px) {
+        video {
+            min-height: 270px;
+        }
+    }
+</style>
+<div class="video-container" ng-controller="imageBlockController" ng-focus="block.focus">
+    {{mediaItem = (block.data.video[0].mediaKey | mediaItemResolver); ""}}
+    {{posterItem = (block.data.poster[0].mediaKey | mediaItemResolver); ""}}
+    <video class="image w-100" controls preload="metadata" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}" 
+           ng-attr-poster="{{posterItem !== null ? posterItem.mediaLink + '?rmode=min&width=900' : undefined}}"
+           ng-style="{'border-radius': borderRadius + 'px', 'box-shadow': boxShadow}">
+        Sorry, your browser doesn't support embedded videos, but don't worry, you can
+        <a href="{{mediaItem.mediaLink}}">download it</a>
+        and watch it with your favorite video player!
+    </video>
+    <span ng-if="mediaItem !== null && mediaItem.name" class="file-name">{{mediaItem.name}}</span>
+</div>

@@ -1,0 +1,23 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ButtonsGroupBlock>>
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks;
+@{
+	var design = ViewData["Design"] as Design;
+	var buttons = Model?.Content?.Buttons?.Select(x => x.Content).OfType<CallToAction2Block>() ?? Enumerable.Empty<CallToAction2Block>();
+	var alignmentClass = Model?.Content?.HorizontalAlignment == "Right" ?
+	"justify-content-end" : (Model?.Content?.HorizontalAlignment == "Center" ?
+	"justify-content-center" : (Model?.Content?.HorizontalAlignment == "Left" ?
+	"justify-content-start" : string.Empty));
+}
+<div class="d-flex align-items-center flex-wrap @alignmentClass">
+	@{
+		var lastButton = buttons.LastOrDefault();
+		foreach (var button in buttons)
+		{
+			if (!string.IsNullOrWhiteSpace(button?.Link?.Url))
+			{
+				<a class="btn @(button.Variant == "Secondary" ? "btn-outline-primary" : "btn-primary") mt-2 me-2 @(button.Size == "Large" ? "btn-lg" : button.Size == "Small" ? "btn-sm" : "")" href="@button.Link.Url" target="@button.Link.Target">@button.Link.Name</a>
+			}
+		}
+	}
+</div>

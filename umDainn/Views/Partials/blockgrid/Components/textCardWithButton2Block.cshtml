@@ -1,0 +1,35 @@
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<TextCardWithButton2Block>>
+@{
+	var design = ViewData["Design"] as Design;
+	var hasBrightContrast = Model.Content.Contrast == "ffffff";
+	var hoverBackground = string.Empty;
+	if (!string.IsNullOrEmpty(Model?.Content?.HoverBackground)
+	&& (design?.BaselineColors?.Background.TryGetValue(Model?.Content?.HoverBackground!, out var value) ?? false))
+	{
+		hoverBackground = value;
+	}
+}
+<div class="card-number style-2 h-100 p-5 border" @(hasBrightContrast ? "bright-contrast" : "") style="--card-hover-bg-color: #@(hoverBackground);">
+	<div class="d-flex justify-content-between align-items-center mb-1">
+		<h3 class="h3 mb-0 text-break" style="color: inherit;">@Model.Content.Headline</h3>
+		@if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Url))
+		{
+			<a href="@Model.Content.Link.Url" target="@Model.Content.Link.Target" class="icon-holder ms-1" style="color: inherit;">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-2-2">
+					<path d="M22 2L2 22" stroke="currentColor" stroke-width="3.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+					<path d="M22 20.3393V2H3.66071" stroke="currentColor" stroke-width="3.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+				</svg>
+			</a>
+		}
+	</div>
+	<div class="text-holder">
+		@Model?.Content.RichText
+	</div>
+	@if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Url))
+	{
+		<a href="@Model.Content.Link.Url" target="@Model.Content.Link.Target" class="stretched-link">
+			<span class="visually-hidden">@Model.Content.Headline</span>
+		</a>
+	}
+</div>

@@ -1,0 +1,24 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+<div class="mt-3" ng-controller="callToActionBlockController" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div class="mb-3">
+        <input type="text" class="form-control pe-none" placeholder="Full Name">
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control pe-none" placeholder="Company">
+    </div>
+    <div class="mb-3">
+        <input type="email" class="form-control pe-none" placeholder="Email">
+    </div>
+    <div class="mb-3">
+        <textarea class="form-control" rows="3" placeholder="Tell us about your project or challenge"></textarea>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="button" style="min-width: 180px;">Submit</button>
+    </div>
+</div>

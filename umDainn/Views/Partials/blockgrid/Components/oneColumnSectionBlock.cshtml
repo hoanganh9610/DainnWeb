@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<OneColumnSectionBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+    var image = Model.Content.BackgroundPicture;
+    var paddingTopClass = Model.Content.AddMarginToTheTop ? "pt-5 pt-md-7 pt-lg-8" : "pt-0";
+    var paddingBottomClass = Model.Content.AddMarginToTheBottom ? "pb-5 pb-md-7 pb-lg-8" : "pb-0";
+}
+<section class="@(paddingTopClass) @(paddingBottomClass)" style="background-color:#@backgroundColor@(image != null ? $"; background-image: url({image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 1920)});" : "")" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : null)>
+    @await Html.GetBlockGridItemAreasHtmlAsync(Model)
+</section>

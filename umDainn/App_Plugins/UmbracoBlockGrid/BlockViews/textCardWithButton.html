@@ -1,0 +1,15 @@
+<div class="card-number h-100 p-5 border hover-anim" ng-controller="textCardWithButtonController" ng-click="block.edit()" ng-focus="block.focus" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" data-bs-theme="light">
+    <style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+    <h5 class="h5 mb-3">{{block.data.subtitle}}</h5>
+    <div class="d-flex justify-content-between align-items-center mb-1">
+        <h3 class="h3 mb-0 text-break" style="color: inherit;">{{block.data.headline}}</h3>
+        <a class="ms-1 icon-holder" style="color: inherit;">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+            </svg>
+        </a>
+    </div>
+    <div class="text-holder">
+        <p ng-bind-html="block.data.richText.markup | safe_html"></p>
+    </div>
+</div>

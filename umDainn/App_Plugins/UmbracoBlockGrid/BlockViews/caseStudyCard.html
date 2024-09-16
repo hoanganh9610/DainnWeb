@@ -1,0 +1,12 @@
+<div class="card-case style-1" ng-controller="caseStudyCardBlockController" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus">
+    <style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+    {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+    <div class="img-holder mb-4 border-radius" ng-if="mediaItem !== null">
+        <img class="border-radius" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=650">
+    </div>
+    <p class="lead-sm mb-0">{{block.data.companyName}}</p>
+    <h3 class="h3 card-title">{{block.data.projectName}}</h3>
+    <ul class="list-unstyled">
+        <li ng-repeat="tag in block.data.tags" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}">{{tag}}</li>
+    </ul>
+</div>

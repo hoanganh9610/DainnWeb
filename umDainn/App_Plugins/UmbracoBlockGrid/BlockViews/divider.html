@@ -1,0 +1,11 @@
+<style>
+    :host {
+        user-select: none;
+        min-height: 2rem;
+    }
+</style>
+<div class="h-100" ng-controller="dividerBlockController" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" 
+     ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+    <hr ng-style="{'border-top-color': '#' + selectedBackground[block.data.backgroundColor]}" />
+</div>

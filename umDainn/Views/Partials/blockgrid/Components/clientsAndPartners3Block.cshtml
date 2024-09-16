@@ -1,0 +1,40 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ClientsAndPartners3Block>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Extensions;
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var images = Model?.Content?.Logos?.ToList() ?? new List<MediaWithCrops>();
+    var hasMoreThanSixItems = images.Count > 6;
+    var hasBrightContrast = Model?.Content.Contrast == "ffffff";
+}
+<section class="section-clients style-3 overflow-x-hidden  @((images.Count == 8) ? "items-8" : "") @(hasMoreThanSixItems ? "animated" : "")" style="background-color:#@backgroundColor" @(hasBrightContrast ? "bright-contrast" : "")>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 d-lg-flex align-items-lg-center">
+                <h2 class="h2 text-center mb-4 mb-lg-0">@Model?.Content?.Title</h2>
+            </div>
+            <div class="col-lg-8">
+                <div class="container-3">
+                    @foreach (var image in images)
+                    {
+                        var altText = image.Value<string>("altText");
+                        if (string.IsNullOrWhiteSpace(altText))
+                        {
+                            altText = image.Name;
+                        }
+                        <div class="item-holder">
+                            <img src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 160)" width="160" height="64" class="object-fit-contain" alt="@altText" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

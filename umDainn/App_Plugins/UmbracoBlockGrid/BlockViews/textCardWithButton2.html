@@ -1,0 +1,16 @@
+<div class="card-number style-2 h-100 p-5 border" ng-controller="textCardWithButton2Controller" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor], '--card-hover-bg-color': '#'+selectedBackground[block.data.hoverBackground]}" ng-click="block.edit()" ng-focus="block.focus" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" data-bs-theme="light">
+	<style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+	<h5 class="h5 mb-3">{{block.data.subtitle}}</h5>
+	<div class="d-flex justify-content-between align-items-center mb-1">
+		<h3 class="h3 mb-0 text-break" style="color: inherit;">{{block.data.headline}}</h3>
+		<div class="icon-holder ms-1" style="color: inherit;">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-2-2">
+				<path d="M22 2L2 22" stroke="currentColor" stroke-width="3.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+				<path d="M22 20.3393V2H3.66071" stroke="currentColor" stroke-width="3.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+		</div>
+	</div>
+	<div class="text-holder">
+		<p ng-bind-html="block.data.richText.markup | safe_html"></p>
+	</div>
+</div>

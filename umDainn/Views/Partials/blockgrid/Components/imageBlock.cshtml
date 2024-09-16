@@ -1,0 +1,18 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ImageBlock>>
+@using Umbraco.Cms.Core.Models
+@{
+    var image = Model.Content.Image;
+    if (image is not null)
+    {
+        var altText = image.Value<string>("altText");
+        if (string.IsNullOrWhiteSpace(altText))
+        {
+            altText = image.Name;
+        }
+        <img class="image w-100 border-radius box-shadow-pictures-and-video" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 1920)" alt="@altText" />
+    }
+    else
+    {
+        <p>Missing image</p>
+    }
+}

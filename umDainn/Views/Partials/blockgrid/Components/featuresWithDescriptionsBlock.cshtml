@@ -1,0 +1,63 @@
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<FeaturesWithDescriptionsBlock>>
+@{
+	var design = ViewData["Design"] as Design;
+	var backgroundColor = string.Empty;
+	if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+	&& (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+	{
+		backgroundColor = value;
+	}
+	string GetBackgroundColor(Dictionary<string, string> colors, string key)
+    {
+        return !string.IsNullOrEmpty(key) && (colors?.TryGetValue(key, out var value) ?? false) ? value : string.Empty;
+    }
+	var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+	var hasBrightContrast = Model.Content.Contrast == "ffffff";
+	var uniqueId = "accordion-" + Model?.Content?.Key ?? Guid.NewGuid().ToString();
+	var image = Model.Content.Image;
+	var dividerColor = GetBackgroundColor(design?.BaselineColors?.Background ?? new(), Model.Content.DividerColor ?? string.Empty);
+}
+<div class="features-with-descriptions py-8 py-md-10 @(noBackgroundColor ? "nobackgroundcolor" : "with-bg")"" id=" @uniqueId" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "") data-bs-theme="light">
+	<div class="container">
+		<div class="mw-xl mx-auto mw-lg-none">
+			<h2 class="h2 mb-6">@Model.Content.Title</h2>
+			<div class="row">
+				<div class="col-12 col-lg-6 mb-12 mb-lg-0">
+					<div class="mw-lg">
+						<div class="accordion">
+@{
+	var items = Model?.Content?.Items?.Select(x => x.Content).OfType<AccordionItem2>().ToList();
+	@for (int i = 0; i < items?.Count; i++)
+	{
+		
+									<div class="accordion-item border-bottom mb-0" style="--bs-border-color: #@dividerColor">
+										<p class="accordion-header position-relative">
+											<span class="accordion-button d-flex w-100 justify-content-between align-items-center border-none shadow-none py-5 px-0 shadow-none @(i == 0 ? "" : "collapsed")" type="button" data-bs-toggle="collapse" data-bs-target="#@uniqueId-collapse-@i" aria-expanded="@(i == 0 ? "true" : "false")" aria-controls="@uniqueId-collapse-@i">
+												<span class="h4 mb-0">@items[i].Headline</span>
+												<span class="accordion-arrow position-relative" style="width: 26px; height: 26px;">
+													<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path d="M19.4961 10.4346L12.9483 3.88682L6.40058 10.4346" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+														<path d="M12.9453 22.2246L12.9453 4.06996" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+													</svg>
+												</span>
+											</span>
+										</p>
+										<div id="@uniqueId-collapse-@i" class="accordion-collapse collapse @(i == 0 ? "show" : "")" data-bs-parent="#@uniqueId">
+											<div class="accordion-body lead-lg px-0">@items[i].RichText</div>
+										</div>
+									</div>
+	}
+}
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-lg-6">
+					<img class="img-fluid d-block mx-auto me-lg-0 border-radius" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 1920)" alt="...">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="accordion">
+</div>

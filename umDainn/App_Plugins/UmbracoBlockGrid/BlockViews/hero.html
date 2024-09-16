@@ -1,0 +1,60 @@
+<style>
+    .section-hero {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    slot {
+        cursor: initial;
+        user-select: auto;
+        --umb-block-grid--text-color: #fff;
+        --umb-block-grid--text-color-hover: #9fbfff;
+    }
+
+    /** Hero */
+    .umb-block-grid__layout-item[data-content-element-type-alias="heroBlock"] .umb-block-grid__area-container,
+    .umb-block-grid__layout-item[data-content-element-type-alias="heroBlock"] .umb-block-grid__block--view::part(area-container) {
+        padding: 0;
+    }
+
+    .section-hero[bright-contrast] {
+        color: white;
+        --my-bright-contrast: ;
+        --has-bright-contrast: white;
+    }
+</style>
+<div class="section-hero" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-controller="heroBlockController" ng-click="block.edit()" ng-focus="block.focus" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}">
+    <style ng-bind="styles"></style>
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <div class="hero-inner d-flex" ng-style="{
+        
+        'align-items': block.data.contentVerticalPosition === 'Top' ? 'start' :
+                        block.data.contentVerticalPosition === 'Center' ? 'center' : 'end',
+                        
+    }">
+        <div class="hero-background" ng-style="{
+            'background-image': 'url('+(block.data.image[0].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=1920)'
+        }">
+        </div>
+        <div class="hero-content" ng-style="{
+            'margin-left': block.data.contentHorizontalPosition === 'Right' ? 'auto' :
+                        block.data.contentHorizontalPosition === 'Center' ? 'auto' : '0',
+            'margin-right': block.data.contentHorizontalPosition === 'Left' ? 'auto' :
+                            block.data.contentHorizontalPosition === 'Center' ? 'auto' : '0'
+           
+        }">
+            <h1 class="h1" ng-style="{ 'text-align': block.data.headlineAlignment === 'Right' ? 'end' :
+            block.data.headlineAlignment === 'Center' ? 'center' : 'start'}">
+                {{block.data.headline}}
+            </h1>
+            <umb-block-grid-render-area-slots ng-click="$event.stopPropagation()"></umb-block-grid-render-area-slots>
+        </div>
+    </div>
+</div>

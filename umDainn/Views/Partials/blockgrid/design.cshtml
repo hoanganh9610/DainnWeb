@@ -1,0 +1,542 @@
+@using PageBuilder.Core.Infrastructure.Helpers
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Design>
+@{
+    var c = Model?.BaselineColors!;
+    var t = Model?.Typography!;
+    var cornerRadius = Model?.CornerRadius!;
+    var dropShadow = Model?.DropShadow!;
+}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=@t.GetUniqueFontFamiliesString()&display=swap" />
+<style>
+    body {
+    @Html.Raw(t.Text.GetFontStyles())color: @c.Content.Text;
+    }
+
+    @@media(max-width:992px) {
+        body {
+            font-size: @(t.Text.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+        body {
+            font-size: @(t.Text.Mobile)px;
+        }
+    }
+
+    .lead-lg {
+        font-size: @(t.Text.Desktop + 4)px;
+    }
+
+    .lead-md {
+        font-size: @(t.Text.Desktop)px;
+    }
+
+    .lead-sm {
+        font-size: @(t.Text.Desktop - 2)px;
+    }
+
+    :root {
+        --bs-body-color: @c.Content.Text;
+        --bs-link-color: @Html.HexToRgb(c.Content.Link)?.RgbString;
+        --bs-link-color-rgb: @Html.HexToRgb(c.Content.Link)?.RgbString;
+        --bs-link-hover-color-rgb: @Html.HexToRgb(c.Content.LinkHover)?.RgbString;
+    }
+
+    a {
+        --bs-link-color: @Html.HexToRgb(c.Content.Link)?.RgbString;
+        --bs-link-color-rgb: @Html.HexToRgb(c.Content.Link)?.RgbString;
+        --bs-link-hover-color-rgb: @Html.HexToRgb(c.Content.LinkHover)?.RgbString;
+    }
+
+    .icon-link {
+    @Html.Raw(t.Button.GetFontStyles())color: rgb(@Html.HexToRgb(c.Content.Link)?.RgbString);
+        text-decoration-color: rgb(@Html.HexToRgb(c.Content.Link)?.RgbString);
+    }
+
+    .icon-link:hover {
+        color: rgb(@Html.HexToRgb(c.Content.LinkHover)?.RgbString);
+        text-decoration-color: rgb(@Html.HexToRgb(c.Content.LinkHover)?.RgbString);
+    }
+
+    .accordion {
+        --bs-accordion-btn-color: @c.Content.H2;
+        --bs-accordion-active-color: @c.Content.H2;
+    }
+
+    .accordion-item {
+        color: @c.Content.Text;
+    }
+
+    .accordion .h5 {
+        color: @c.Content.H5;
+    }
+
+    .accordion-body h1 {
+        color: @c.Content.H1;
+    }
+
+    .accordion-body h2 {
+        color: @c.Content.H2;
+    }
+
+    .accordion-body h3 {
+        color: @c.Content.H3;
+    }
+
+    .accordion-body h4 {
+        color: @c.Content.H4;
+    }
+
+    .accordion-body h5 {
+        color: @c.Content.H5;
+    }
+
+    .accordion-body h6 {
+        color: @c.Content.H6;
+    }
+
+    .accordion-body {
+        font-family: @t.Text.Font.FontFamily, @t.Text.Font.FontCategory;
+        font-style: @t.Text.Font.FontStyle;
+        font-weight: @t.Text.Font.FontWeight;
+        color: @c.Content.Text;
+    }
+
+    .h1,
+    h1 {
+    @Html.Raw(t.H1.GetFontStyles())color: @c.Content.H1;
+    }
+
+    @@media(max-width:992px) {
+
+        .h1,
+        h1 {
+            font-size: @(t.H1.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h1,
+        h1 {
+            font-size: @(t.H1.Mobile)px;
+        }
+    }
+
+    .h2,
+    h2 {
+    @Html.Raw(t.H2.GetFontStyles())color: @c.Content.H2;
+    }
+
+    @@media(max-width:992px) {
+
+        .h2,
+        h2 {
+            font-size: @(t.H2.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h2,
+        h2 {
+            font-size: @(t.H2.Mobile)px;
+        }
+    }
+
+    .h3,
+    h3 {
+    @Html.Raw(t.H3.GetFontStyles())color: @c.Content.H3;
+    }
+
+    @@media(max-width:992px) {
+
+        .h3,
+        h3 {
+            font-size: @(t.H3.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h3,
+        h3 {
+            font-size: @(t.H3.Mobile)px;
+        }
+    }
+
+    .h4,
+    h4 {
+    @Html.Raw(t.H4.GetFontStyles())color: @c.Content.H4;
+    }
+
+    @@media(max-width:992px) {
+
+        .h4,
+        h4 {
+            font-size: @(t.H4.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h4,
+        h4 {
+            font-size: @(t.H4.Mobile)px;
+        }
+    }
+
+    .h5,
+    h5 {
+    @Html.Raw(t.H5.GetFontStyles())color: @c.Content.H5;
+    }
+
+    @@media(max-width:992px) {
+
+        .h5,
+        h5 {
+            font-size: @(t.H5.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h5,
+        h5 {
+            font-size: @(t.H5.Mobile)px;
+        }
+    }
+
+    .h6,
+    h6 {
+    @Html.Raw(t.H6.GetFontStyles())color: @c.Content.H6;
+    }
+
+    @@media(max-width:992px) {
+
+        .h6,
+        h6 {
+            font-size: @(t.H6.Tablet)px;
+        }
+    }
+
+    @@media(max-width:575px) {
+
+        .h6,
+        h6 {
+            font-size: @(t.H6.Mobile)px;
+        }
+    }
+
+    .btn-light {
+    @Html.Raw(t.Button.GetFontStyles())
+    }
+
+    .btn {
+        font-style: @t.Button.Font.FontStyle;
+        --bs-btn-font-family: @t.Button.Font.FontFamily, @t.Button.Font.FontCategory;
+        --bs-btn-font-weight: @t.Button.Font.FontWeight;
+        --bs-btn-font-size: @(t.Button.Desktop)px;
+    }
+
+    .btn.btn-sm,
+    .btn,
+    .btn.btn-lg {
+        border-radius: @(cornerRadius.Buttons)px;
+    }
+
+    .btn.btn-primary {
+        color: @c.Button.Text;
+        background: @c.Button.Fill;
+        border-color: @c.Button.Stroke;
+    }
+
+    .btn.btn-primary:hover {
+        color: @c.Button.TextHover;
+        background: @c.Button.FillHover;
+        border-color: @c.Button.StrokeHover;
+    }
+
+    .btn.btn-primary:active {
+        color: @c.Button.TextHover;
+        background: @c.Button.FillHover;
+        border-color: @c.Button.StrokeHover;
+    }
+
+    .btn.btn-outline-primary {
+        color: @c.ButtonSecondary.Text;
+        border-color: @c.ButtonSecondary.Stroke;
+    }
+
+    .btn.btn-outline-primary:hover {
+        color: @c.ButtonSecondary.TextHover;
+        background: @c.ButtonSecondary.FillHover;
+        border-color: @c.ButtonSecondary.StrokeHover;
+    }
+
+    .btn.btn-outline-primary:active {
+        color: @c.ButtonSecondary.TextHover;
+        background: @c.ButtonSecondary.FillHover;
+        border-color: @c.ButtonSecondary.StrokeHover;
+    }
+
+    .card-pricing .badge {
+        color: @c.Button.Text !important;
+        background: @c.Button.Fill !important;
+        border-color: @c.Button.Stroke !important;
+    }
+
+    .list-group-item.active {
+        color: @c.Button.Text;
+        background: @c.Button.Fill;
+        border-color: @c.Button.Fill;
+    }
+
+    .pagination .page-link.active,
+    .active>.page-link {
+        color: @c.Button.Text;
+        background-color: @c.Button.Fill;
+        border-color: @c.Button.Fill;
+    }
+
+    .card {
+        color: @c.Content.Text;
+        box-shadow: @(dropShadow.Cards.ToString())
+    }
+
+    .card .h1 {
+        color: @c.Content.H1;
+    }
+
+    .card .h2 {
+        color: @c.Content.H2;
+    }
+
+    .card .h3 {
+        color: @c.Content.H3;
+    }
+
+    .card .h4 {
+        color: @c.Content.H4;
+    }
+
+    .card .h5 {
+        color: @c.Content.H5;
+    }
+
+    .card .h6 {
+        color: @c.Content.H6;
+    }
+
+    .card.base-card h2 {
+        color: @c.Content.H2;
+    }
+
+    .card.base-card h3 {
+        color: @c.Content.H3;
+    }
+
+    .card.base-card h4 {
+        color: @c.Content.H4;
+    }
+
+    .card.base-card h5 {
+        color: @c.Content.H5;
+    }
+
+    .card.base-card h6 {
+        color: @c.Content.H6;
+    }
+
+    .carousel-review .carousel-item h2 {
+        color: @c.Content.H2;
+    }
+
+    .carousel-review .carousel-item h3 {
+        color: @c.Content.H3;
+    }
+
+    .carousel-review .carousel-item h4 {
+        color: @c.Content.H4;
+    }
+
+    .carousel-review .carousel-item h5 {
+        color: @c.Content.H5;
+    }
+
+    .carousel-review .carousel-item h6 {
+        color: @c.Content.H6;
+    }
+
+    .breadcrumb-item a {
+        color: rgba(@Html.HexToRgb(c.Content.Link)?.RgbString);
+    }
+
+    .breadcrumb-item,
+    .breadcrumb-item.active {
+        color: @c.Content.Text;
+    }
+
+    .form-control {
+        --bs-secondary-color: @c.Content.Text;
+    }
+
+    .card-feature-sm {
+        color: @c.Content.Text;
+        box-shadow: @(dropShadow.Cards.ToString());
+    }
+
+    .card-number {
+        color: @c.Content.Text;
+        box-shadow: @(dropShadow.Cards.ToString());
+    }
+
+    .card-member {
+        color: @c.Content.Text;
+        box-shadow: @(dropShadow.Cards.ToString());
+    }
+
+    .card-pricing {
+        color: @c.Content.Text;
+        box-shadow: @(dropShadow.Cards.ToString());
+    }
+
+    .card-pricing .h3 {
+        color: @c.Content.H3;
+    }
+
+    .card-pricing .h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-pricing h1 {
+        color: @c.Content.H1;
+    }
+
+    .card-pricing h2 {
+        color: @c.Content.H2;
+    }
+
+    .card-pricing h3 {
+        color: @c.Content.H3;
+    }
+
+    .card-pricing h4 {
+        color: @c.Content.H4;
+    }
+
+    .card-pricing h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-pricing h6 {
+        color: @c.Content.H6;
+    }
+
+    .card-feature-sm .h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-feature-sm h1 {
+        color: @c.Content.H1;
+    }
+
+    .card-feature-sm h2 {
+        color: @c.Content.H2;
+    }
+
+    .card-feature-sm h3 {
+        color: @c.Content.H3;
+    }
+
+    .card-feature-sm h4 {
+        color: @c.Content.H4;
+    }
+
+    .card-feature-sm h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-feature-sm h6 {
+        color: @c.Content.H6;
+    }
+
+    .card-number .h2 {
+        color: @c.Content.H2;
+    }
+
+    .card-number .h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-number h1 {
+        color: @c.Content.H1;
+    }
+
+    .card-number h2 {
+        color: @c.Content.H2;
+    }
+
+    .card-number h3 {
+        color: @c.Content.H3;
+    }
+
+    .card-number h4 {
+        color: @c.Content.H4;
+    }
+
+    .card-number h5 {
+        color: @c.Content.H5;
+    }
+
+    .card-number h6 {
+        color: @c.Content.H6;
+    }
+
+    .card-case {
+        color: @c.Content.Text;
+    }
+
+    .card-case .h3 {
+        color: @c.Content.H3;
+    }
+
+    .border-radius {
+        border-radius: @(cornerRadius.PicturesAndVideo)px;
+    }
+
+    .box-shadow-pictures-and-video {
+        box-shadow: @(dropShadow.PicturesAndVideo.ToString())
+    }
+
+    .section-review-3 .swiper-slide {
+        color: @c.Content.Text;
+    }
+
+    .section-review-3 .swiper-slide h1 {
+        color: @c.Content.H2;
+    }
+
+    .section-review-3 .swiper-slide h2 {
+        color: @c.Content.H2;
+    }
+
+    .section-review-3 .swiper-slide h3 {
+        color: @c.Content.H3;
+    }
+
+    .section-review-3 .swiper-slide h4 {
+        color: @c.Content.H4;
+    }
+
+    .section-review-3 .swiper-slide h5 {
+        color: @c.Content.H5;
+    }
+
+    .section-review-3 .swiper-slide h6 {
+        color: @c.Content.H6;
+    }
+</style>

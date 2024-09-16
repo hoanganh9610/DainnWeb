@@ -1,0 +1,89 @@
+﻿<div ng-controller="cornerRadiusController" class="fonts-property-editor effects-block">
+    <div class="accordion" id="cornerRadius-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#cornerRadiusPicturesAndVideo">
+                    <span>Pictures & Video</span>
+                </a>
+            </div>
+            <div id="cornerRadiusPicturesAndVideo" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span3">
+                                <div class="colour-item">
+                                    <label for="picturesAndVideoInput" class="control-label">Border Radius</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="picturesAndVideoInput" type="number" min="0" max="999" name="picturesAndVideoInput" ng-model="model.value.picturesAndVideo" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span9" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background: #ffffff;">
+                                        <div class="imgs-holder">
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-img.jpg" ng-style="{'border-radius': model.value.picturesAndVideo + 'px'}" />
+                                            </div>
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-video.jpg" ng-style="{'border-radius': model.value.picturesAndVideo + 'px'}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#buttonBorderRadius">
+                    <span>Buttons</span>
+                </a>
+            </div>
+            <div id="buttonBorderRadius" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span3">
+                                <div class="colour-item">
+                                    <label for="buttonBorderRadiusInput" class="control-label">Border Radius</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="buttonBorderRadiusInput" type="number" min="0" max="999" name="buttonBorderRadiusInput" ng-model="model.value.buttons" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span9" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background: #ffffff;">
+                                        <div class="buttons-holder" ng-style="{
+                                             'font-size' : typography.text.desktop + 'px' ,
+                                             'font-family' : typography.button.font.fontFamily + ', ' + typography.button.font.fontCategory,
+                                             'font-weight' : typography.button.font.fontWeight,
+                                             'font-style' : typography.button.font.fontStyle,
+                                             '--bs-btn-color' : '#' + baselineColors.button.text,
+                                             '--bs-btn-hover-color' : '#' + baselineColors.button.textHover,
+                                             '--bs-btn-bg' : '#' + baselineColors.button.fill,
+                                             '--bs-btn-hover-bg' : '#' + baselineColors.button.fillHover,
+                                             '--bs-btn-border-color' : '#' + baselineColors.button.stroke,
+                                             '--bs-btn-hover-border-color' : '#' + baselineColors.button.strokeHover,
+                                             '--bs-btn-border-radius' : model.value.buttons + 'px',
+                                             '--bs-border-radius-sm' : model.value.buttons + 'px',
+                                             '--bs-border-radius-lg': model.value.buttons + 'px'
+                                         }">
+                                            <a ng-style="buttonStyle" class="btn btn-primary btn-lg">Large Button</a> <a ng-style="buttonStyle" class="btn btn-primary">Normal Button</a> <a ng-style="buttonStyle" class="btn btn-primary btn-sm">Small Button</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

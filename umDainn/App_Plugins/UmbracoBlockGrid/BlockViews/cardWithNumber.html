@@ -1,0 +1,13 @@
+<div class="card-number h-100" ng-class="{'p-5':  block.data.backgroundColor != null}" ng-controller="CardWithNumberController" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus">
+    <style ng-bind="styles"></style>
+    {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+    <div class="mb-3" ng-if="mediaItem !== null">
+        <img ng-class="{'feature-icon-svg': mediaItem.properties[0].config.fileExtensions[0].value === 'svg'}" ng-src="{{mediaItem.mediaLink}}?width=32" draggable="false" alt="{{mediaItem.name}}">
+    </div>
+    <h3 class="h2 mb-3">{{block.data.headline}}</h3>
+    <hr class="mt-0 mb-3" ng-style="{'border-color': '#' + selectedBackground[block.data.dividerColor]}" />
+    <p class="mb-3 fw-medium">{{block.data.subtitle}}</p>
+    <div class="text-holder lead-sm">
+        <p ng-bind-html="block.data.richText.markup | safe_html"></p>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+<section class="position-relative banner-3 overflow-hidden" ng-controller="banner3BlockController" ng-click="block.edit()" ng-focus="block.focus" ng-style="{
+	'background-color': '#' + selectedBackground[block.data.backgroundColor],
+}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}">
+	<style ng-bind="styles"></style>
+	<div class="license-message" ng-if="!licenseIsValid">
+		<div class="license-block">
+			<div class="img-holder">
+				<img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+			</div>
+			<div ng-bind-html="message | safe_html" class="content-holder"></div>
+		</div>
+	</div>
+	<div class="inner-holder position-relative w-100 ms-auto me-auto">
+		<div class="position-relative pb-7 pb-xl-14 overflow-hidden">
+			<div class="position-relative container">
+				<img class="d-none d-sm-block position-absolute top-50 start-0 translate-middle-y border-radius object-fit-cover mt-10" ng-src="{{ (block.data.image1[0].mediaKey | mediaItemResolver).mediaLink + '?rmode=min&width=960' }}" alt="{{block.data.title}}" style="width: 243px; height: 346px;margin-left: -2rem;">
+				<img class="d-none d-lg-block position-absolute top-0 end-0 me-3 border-radius object-fit-cover" ng-src="{{ (block.data.image2[0].mediaKey | mediaItemResolver).mediaLink + '?rmode=min&width=960' }}" alt="{{block.data.title}}" style="width: 238px; height: 214px;">
+				<div class="mw-sm mw-lg-xl mw-xl-3xl mx-auto mb-3 mb-lg-14 mb-xl-8 text-center position-relative">
+					<p class="d-none d-xl-inline-block h1 lh-1">{{block.data.title}}</p>
+					<p class="h1 d-xl-none lh-1">{{block.data.title}}</p>
+				</div>
+				<div class="mw-sm ms-auto mw-1xl text-holder">
+					<p class="text-center text-md-end fw-medium">
+						<span class="d-block">{{block.data.text}}</span>
+					</p>
+				</div>
+				<img class="d-lg-none d-block ms-auto mt-8 img-fluid ml-auto" src="asitrastudio-assets/headers/right-photo-rounded.png" alt="{{block.data.title}}">
+			</div>
+			<div class="position-absolute bottom-0 start-50 translate-middle-x">
+				<div class="position-absolute top-0 start-50 translate-middle me-4 mb-16 d-flex align-items-center justify-content-center rounded-circle" style="background:white; width: 172px; height: 172px;color: #1a1a1a;">
+					<div class="circle spin">
+						<div class="circle-text text-dark text-uppercase">
+							<p>{{block.data.circleText}}</p>
+						</div>
+					</div>
+					<svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="position-relative position-absolute top-50 start-50 translate-middle">
+						<path d="M31.2031 2L2.00046 31.2027" stroke="black" stroke-width="3.04194" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+						<path d="M31.2031 28.7778V2H4.42532" stroke="black" stroke-width="3.04194" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</div>
+				<img ng-src="{{ (block.data.image3[0].mediaKey | mediaItemResolver).mediaLink + '?rmode=min&width=960' }}" alt="{{block.data.title}}" class="border-radius object-fit-cover" style="width: 272px; height: 214px;">
+			</div>
+			<div class="pb-14 pb-xl-0"></div>
+			<div class="pb-12 pb-xl-0"></div>
+		</div>
+	</div>
+</section>
+<style>
+	@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap");
+
+	.banner-3 {
+		--radius: 84px;
+		--frame-size: calc(var(--radius) / 3);
+		--d-outer: calc(var(--radius) * 2);
+		--d-inner: calc(var(--d-outer) - var(--frame-size));
+		--font-size: calc(var(--radius) / 10);
+	}
+
+	.banner-3 .circle {
+		position: relative;
+		width: var(--d-outer);
+		height: var(--d-outer);
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: var(--font-size);
+		font-family: Inconsolata, sans-serif;
+	}
+
+	.banner-3 .circle-text {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+
+	.banner-3 .circle-text p span {
+		position: absolute;
+		left: 50%;
+		font-size: 14px;
+		transform-origin: 0 var(--radius);
+	}
+</style>

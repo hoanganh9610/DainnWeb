@@ -1,0 +1,93 @@
+.siteHeaderController .umb-form-check__symbol {
+  /* position: relative; */
+  font-size: 15px;
+}
+
+.siteHeaderController .umb-form-check .umb-form-check__state {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: solid 1px #d9d9d9;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.umb-form-check__input:checked ~ .umb-form-check__state {
+  background: #eeeeee;
+}
+
+.siteHeaderController .umb-form-check .umb-form-check__info {
+  margin-left: 0;
+}
+
+.siteHeaderController .umb-form-check .umb-form-check__check {
+  display: none;
+}
+
+.siteHeaderController .umb-form-check {
+  position: relative;
+  display: inline-flex;
+  padding: 5px 10px;
+  line-height: 1;
+}
+
+.siteHeaderController .umb-form-check input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  border: 0;
+}
+
+.siteHeaderController .list-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.siteHeaderController .list-item {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.siteHeaderController .info-holder {
+  position: relative;
+  display: flex;
+  margin: 0 10px 0 7px;
+}
+
+.siteHeaderController .info-holder .text-holder {
+  transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 200px;
+  padding: 10px;
+  line-height: 1.25;
+  background: #eeeeee;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 3;
+}
+
+.siteHeaderController .info-holder .text-holder p {
+  margin-bottom: 0;
+}
+
+.siteHeaderController .info-holder:hover .text-holder {
+  opacity: 1;
+  visibility: visible;
+}
+
+.siteHeaderController .colour-body {
+  background: #eeeeee;
+}

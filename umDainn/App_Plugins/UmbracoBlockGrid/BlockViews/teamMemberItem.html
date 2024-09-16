@@ -1,0 +1,12 @@
+<div class="swiper-slide h-auto mw-sm" ng-repeat="review in block.data.items.contentData">
+	<div class="flex-shrink-0 me-8 w-100 h-100">
+		<div class="ratio ratio-1x1 mb-4">
+			{{mediaItem = (review.image[0].mediaKey | mediaItemResolver); ""}}
+			<img class="img-fluid w-100 object-fit-cover rounded-4" style="object-fit: cover;" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}" alt="...">
+		</div>
+		<div class="mw-sm">
+			<span class="lead-sm">{{review.position}}</span>
+			<h4 class="h4 mt-1 mb-0">{{review.fullName}}</h4>
+		</div>
+	</div>
+</div>

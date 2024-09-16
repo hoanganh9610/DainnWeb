@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<HeadlineBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var headlineLevel = string.IsNullOrEmpty(Model.Content.HeadlineLevel) ? "2" : Model.Content.HeadlineLevel.Substring(1);
+    var alignmentClass = Model.Content.HorizontalAlignment == "Right" ?
+    "text-end" : (Model.Content.HorizontalAlignment == "Center" ? "text-center" : string.Empty);
+}
+<h@(headlineLevel) class="h@(headlineLevel) @alignmentClass">@Model.Content.HeadlineText</h@(headlineLevel)>

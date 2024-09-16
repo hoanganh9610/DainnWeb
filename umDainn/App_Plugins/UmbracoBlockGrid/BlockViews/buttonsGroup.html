@@ -1,0 +1,13 @@
+<div ng-controller="buttonsGroupBlockController" ng-click="block.edit()" ng-focus="block.focus" class="d-flex align-items-center flex-wrap" ng-class="{
+	'justify-content-start': block.data.horizontalAlignment === 'Left', 
+	'justify-content-end': block.data.horizontalAlignment === 'Right', 
+	'justify-content-center': block.data.horizontalAlignment === 'Center'
+}" data-bs-theme="light">
+	<style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+	<a ng-repeat="button in block.data.buttons.contentData" ng-if="button.link[0].url" class="btn me-2 mt-2" ng-class="{
+				'btn-lg': button.size == 'Large',
+				'btn-sm': button.size == 'Small',
+				'btn-primary': button.variant === 'Primary' || button.variant === '' || button.variant === undefined,
+				'btn-outline-primary': button.variant === 'Secondary'
+		   }" role="button">{{button.link[0].name}}</a>
+</div>

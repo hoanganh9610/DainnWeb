@@ -1,0 +1,17 @@
+<div class="card-feature-sm" ng-controller="featureBlockController" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+    <div class="img-holder mb-4" ng-if="mediaItem !== null">
+        <img ng-class="{'feature-icon-svg': mediaItem.properties[0].config.fileExtensions[0].value === 'svg'}" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=96" draggable="false" alt="{{mediaItem.name}}">
+    </div>
+    <h3 class="h5 mb-3">{{block.data.headline}}</h3>
+    <div class="text-holder">
+        <p ng-bind-html="block.data.richText.markup | safe_html"></p>
+    </div>
+    <a class="btn btn-md mb-2 mb-md-4 mt-4" 
+       ng-class="{
+           'btn-primary': block.data.variant === 'Primary' || block.data.variant === '' || block.data.variant === undefined,
+           'btn-outline-primary': block.data.variant === 'Secondary'
+       }"
+       ng-if="block.data.link[0].name">{{block.data.link[0].name}}</a>
+</div>

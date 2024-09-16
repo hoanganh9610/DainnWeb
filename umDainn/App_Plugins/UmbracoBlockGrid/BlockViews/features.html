@@ -1,0 +1,35 @@
+<section class="section-features py-md-10 py-lg-11" ng-controller="featureBlockController" ng-style="{
+          'background-color': '#' + selectedBackground[block.data.backgroundColor],
+          '--has-bright-contrast': block.data.contrast.value === 'ffffff' ? 'white' : ''
+         }" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus">
+    <style ng-bind="styles"></style>
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-center lead-sm" ng-bind-html="block.data.richText.markup | safe_html"></div>
+        <h2 class="h2 text-center">{{block.data.headline}}</h2>
+        <div class="row row-cols-1" ng-class="{
+                'row-cols-md-2': block.data.additionalFeatures.contentData.length == 2,
+                'row-cols-md-3': block.data.additionalFeatures.contentData.length > 2 && block.data.additionalFeatures.contentData.length <= 3,
+                'row-cols-md-4': block.data.additionalFeatures.contentData.length >= 4,
+                'row-cols-md-1': block.data.additionalFeatures.contentData.length < 2
+            }">
+            <div class="col" ng-repeat="feature in block.data.additionalFeatures.contentData">
+                <div class="card-feature-sm" ng-style="feature.iconSBackground !== '' ? {'background-color': '#' + selectedBackground[feature.iconSBackground]} : {}">
+                    {{mediaItem = (feature.image[0].mediaKey | mediaItemResolver); ""}}
+                    <div class="img-holder mb-4" ng-if="mediaItem !== null">
+                        <img ng-class="{'feature-icon-svg': mediaItem.properties[0].config.fileExtensions[0].value === 'svg'}" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=96" draggable="false" alt="{{mediaItem.name}}">
+                    </div>
+                    <h3 class="h5 mb-3">{{feature.headline}}</h3>
+                    <div class="text-holder" ng-bind-html="feature.richText.markup | safe_html"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

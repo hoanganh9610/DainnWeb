@@ -1,0 +1,18 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BewikiPost>
+@{
+    if (Model == null)
+        return;
+    var postChildren = Model.Children<BewikiPost>() ?? Enumerable.Empty<IPublishedContent>();
+}
+<li>
+    <a id="@Model.Id" class="contrast-support" href="@Model.Url()">@Model.Name</a>
+    @if (postChildren.Any())
+    {
+        <ul>
+            @foreach (var child in postChildren)
+            {
+                @await Html.PartialAsync("wikiPagination", child)
+            }
+        </ul>
+    }
+</li>

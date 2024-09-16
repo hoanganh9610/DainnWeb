@@ -1,0 +1,187 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common
+@using Microsoft.Extensions.Configuration
+@inject UmbracoHelper _umbracoHelper
+@inject IConfiguration _configuration
+@{
+    IPublishedContent? assignedContentItem;
+    try
+    {
+        assignedContentItem = _umbracoHelper.AssignedContentItem;
+    }
+    catch
+    {
+        assignedContentItem = null;
+    }
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+    var design = ViewData["Design"] as Design;
+    var settings = ViewData["Settings"] as Settings;
+    var footerBlock = settings?.Footer?.FirstOrDefault(e => e.Content.ContentType.Alias == "footerBlock");
+    var footerLinks = footerBlock?.Content.Value<BlockListModel>("footerLinks")?.Select(x => x.Content).OfType<FooterLinksGroup>()
+    ?? Enumerable.Empty<FooterLinksGroup>();
+    var buttons = footerBlock?.Content.Value<BlockListModel>("socialMediaButtons")?.Select(x => x.Content).OfType<SocialButton>()
+    ?? Enumerable.Empty<SocialButton>();
+    var copyrightMessage = footerBlock?.Content.Value<string>("copyrightMessage")
+    ?? string.Empty;
+}
+@if (design?.FooterOptions == 0)
+{
+    <footer class="footer" style="background-color: @design?.BaselineColors?.Footer.Background; --footer-link-color: @design?.BaselineColors?.Footer.Link; --footer-link-hover-color: @design?.BaselineColors?.Footer.LinkHover; --footer-title: @design?.BaselineColors?.Footer.Title; --footer-text-color: @design?.BaselineColors?.Footer.CopyrightMessage;">
+        <div class="container text-center text-lg-start">
+            <div class="row justify-content-md-center">
+                @{
+                    RenderFooterLinks(footerLinks, "col-lg-2 d-flex justify-content-center mb-4 mb-md-3");
+                }
+            </div>
+            <div class="d-flex flex-column-reverse flex-lg-row align-items-center justify-content-between pt-4 mt-md-2 border-top lead-sm">
+                <p class="mb-0" style="color: @design?.BaselineColors?.Footer.CopyrightMessage;">@copyrightMessage</p>
+                <ul class="list-unstyled d-flex mb-3 mb-md-0">
+                    @{
+                        RenderFooterButtons(buttons, design?.FooterOptions ?? 0);
+                    }
+                </ul>
+            </div>
+        </div>
+    </footer>
+}
+@if (design?.FooterOptions == 1)
+{
+    <footer class="footer footer-2" style="background-color: @design?.BaselineColors?.Footer.Background; --footer-link-color: @design?.BaselineColors?.Footer.Link; --footer-link-hover-color: @design?.BaselineColors?.Footer.LinkHover; --footer-title: @design?.BaselineColors?.Footer.Title; --footer-text-color: @design?.BaselineColors?.Footer.CopyrightMessage;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 d-flex flex-column align-items-center align-items-lg-start me-lg-auto mb-4 mb-md-3">
+                    <p class="footer-title">Socials</p>
+                    <ul class="list-unstyled d-flex mb-0">
+                        @{
+                            RenderFooterButtons(buttons, design?.FooterOptions ?? 0);
+                        }
+                    </ul>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row @(footerLinks?.Count() <= 4 ? "justify-content-lg-end" : "")">
+                        @{
+                            RenderFooterLinks(footerLinks, "col-lg-3 d-flex text-center text-lg-start justify-content-center justify-content-lg-start mb-4 mb-md-3");
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-2 text-center lead-sm">
+                <p class="mb-0 lh-1">@copyrightMessage</p>
+            </div>
+        </div>
+    </footer>
+}
+@if (design?.FooterOptions == 2)
+{
+    <footer class="footer footer-3" style="background-color: @design?.BaselineColors?.Footer.Background; --footer-link-color: @design?.BaselineColors?.Footer.Link; --footer-link-hover-color: @design?.BaselineColors?.Footer.LinkHover; --footer-title: @design?.BaselineColors?.Footer.Title; --footer-text-color: @design?.BaselineColors?.Footer.CopyrightMessage;">
+        <div class="container">
+            <div class="row flex-column-reverse flex-lg-row">
+                <div class="col-lg-9">
+                    <div class="row">
+                        @{
+                            RenderFooterLinks(footerLinks, "col-lg-3 d-flex text-center text-lg-start justify-content-center justify-content-lg-start mb-4 mb-md-3");
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-3 d-flex flex-column align-items-center align-items-lg-start ms-lg-auto mb-4 mb-md-3">
+                    <p class="footer-title">Socials</p>
+                    <ul class="list-unstyled d-flex mb-0">
+                        @{
+                            RenderFooterButtons(buttons, design?.FooterOptions ?? 0);
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-2 text-center lead-sm">
+                <p class="mb-0 lh-1">@copyrightMessage</p>
+            </div>
+        </div>
+    </footer>
+}
+@if (design?.FooterOptions == 3)
+{
+    <footer class="footer footer-4" style="background-color: @design?.BaselineColors?.Footer.Background; --footer-link-color: @design?.BaselineColors?.Footer.Link; --footer-link-hover-color: @design?.BaselineColors?.Footer.LinkHover; --footer-title: @design?.BaselineColors?.Footer.Title; --footer-text-color: @design?.BaselineColors?.Footer.CopyrightMessage;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 @(design?.Logo == null ? "navbar d-flex justify-content-center justify-content-lg-start align-items-lg-start ps-3 pt-0" : "")">
+                    <a class="@(design?.Logo != null ? "d-inline-block position-relative" : "navbar-brand") @(design?.LogoHover != null ? "has-logo-hover" : "")"
+                       href="@(assignedContentItem != null && isMultisiteSetup ? assignedContentItem.Root().Url() : "/")" style="color: @design?.BaselineColors?.Footer.Link; !important;">
+                        @await Html.PartialAsync("logo", new ViewDataDictionary(ViewData) { { "imageCropAnchor", ImageCropAnchor.Left } })
+                    </a>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row">
+                        @{
+                            RenderFooterLinks(footerLinks, "col-lg-3 d-flex text-center text-lg-start justify-content-center justify-content-lg-start mb-4 mb-md-3");
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    @if (footerBlock?.Areas.Any(a => a.Any()) ?? false)
+                    {
+                        @await Html.GetBlockGridItemAreasHtmlAsync(footerBlock)
+                    }
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-4 mt-md-2 text-center lead-sm">
+                <p class="mb-0 lh-1">@copyrightMessage</p>
+            </div>
+        </div>
+    </footer>
+}
+@functions {
+    private void RenderFooterLinks(IEnumerable<FooterLinksGroup>? footerLinks, string divClass)
+    {
+        foreach (var footerLink in footerLinks ?? Enumerable.Empty<FooterLinksGroup>())
+        {
+            <div class="@divClass">
+                <ul class="footer-nav flex-column">
+                    <li>
+                        <p class="footer-title">@footerLink?.GroupName</p>
+                    </li>
+                    @foreach (var link in footerLink?.Links ?? Enumerable.Empty<Link>())
+                    {
+                        <li>
+                            <a class="nav-link p-0" href="@link?.Url" target="@link?.Target">
+                                <span class="d-inline-flex gap-2 align-items-center">
+                                    @link?.Name
+                                    @if (link?.Target == "_blank")
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                        </svg>
+                                    }
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+    private void RenderFooterButtons(IEnumerable<SocialButton> footerButtons, int footerOption)
+    {
+        var lastButton = footerButtons.LastOrDefault();
+        foreach (var button in footerButtons)
+        {
+            if (!string.IsNullOrWhiteSpace(button?.Link?.Url))
+            {
+                <li class="@(button.Equals(lastButton) ? "" : "me-3")">
+                    <a class="social-holder link-body-emphasis" href="@button.Link.Url" target="@button.Link.Target">
+                        @{
+                            var icon = button.Icon;
+                            if (icon is not null)
+                            {
+                                <span class="social" style="background-image: url(@icon?.GetCropUrl(width: 38, height: 38)); 
+                                                                                                                                                                                                                                                                                                                                                                                                                           margin-bottom: @(footerOption == 0 ? "0" : "5")px;">
+                                </span>
+                            }
+                        }
+                    </a>
+                </li>
+            }
+        }
+    }
+}

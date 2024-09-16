@@ -1,0 +1,132 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common
+@using Microsoft.Extensions.Configuration
+@inject UmbracoHelper _umbracoHelper
+@inject IConfiguration _configuration
+@{
+    IPublishedContent? assignedContentItem;
+    try
+    {
+        assignedContentItem = _umbracoHelper.AssignedContentItem;
+    }
+    catch
+    {
+        assignedContentItem = null;
+    }
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+    var design = ViewData["Design"] as Design;
+    var settings = ViewData["Settings"] as Settings;
+    string navbarBrandClass = "";
+    string collapseClass = "text-lg-right";
+    string navUlClass = "ms-lg-auto";
+    switch (design?.HeaderOptions)
+    {
+        case 1:
+            navbarBrandClass = "me-0";
+            collapseClass = "justify-content-lg-between text-lg-center";
+            navUlClass = "m-lg-auto mb-lg-0";
+            break;
+        case 2:
+            collapseClass = "text-lg-left";
+            navUlClass = "me-lg-auto mb-lg-0";
+            break;
+        default:
+            break;
+    }
+}
+<nav class="header @(design?.ShowHeaderOnScroll == true ? "sticky-top" : "")" style="background-color: @design?.BaselineColors?.Header.Background !important;
+    --bs-navbar-color: @design?.BaselineColors?.Header.Link;
+    --bs-navbar-hover-color: @design?.BaselineColors?.Header.LinkHover;
+    color: @design?.BaselineColors?.Header.Link;">
+    <div class="container">
+        <a class="navbar-brand @navbarBrandClass @(design?.LogoHover != null ? "has-logo-hover" : "")" href="@(assignedContentItem != null && isMultisiteSetup ? assignedContentItem.Root().Url() : "/")">
+            @await Html.PartialAsync("logo", new ViewDataDictionary(ViewData) { { "imageCropAnchor", ImageCropAnchor.Left } })
+        </a>
+        <div class="main-nav flex-grow-1 @collapseClass" style="background-color: @design?.BaselineColors?.Header.Background;">
+            <div class="nav-inner">
+                <ul class="main-menu @navUlClass">
+                    @{
+                        var menuItems = settings?.Header?.FirstOrDefault(e => e.Content.ContentType.Alias == "headerBlock")
+                        ?.Content.Value<BlockListModel>("headerLinks")?.Select(x => x.Content).OfType<HeaderLinksGroup>()
+                        ?? Enumerable.Empty<HeaderLinksGroup>();
+                        foreach (var item in menuItems)
+                        {
+                            if (item?.DropdownLinks?.Any() ?? false)
+                            {
+                                <li class="dropdown">
+                                    <a class="menu-link" @Html.Raw(assignedContentItem?.Url() == item?.MainLink?.Url ? "aria-current=\"page\"" : string.Empty) href="@item?.MainLink?.Url" target="@item?.MainLink?.Target">
+                                        @{
+                                            RenderLinkContent(item?.MainLink);
+                                        }
+                                        <span class="d-inline-flex toggle-icon">
+                                            <svg xmlns="http:www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                            </svg>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu" style="--bs-dropdown-bg: @design?.BaselineColors?.Header.DropdownBackground; --bs-dropdown-link-hover-bg: @design?.BaselineColors?.Header.DropdownBackgroundHover; --bs-dropdown-link-active-bg: @design?.BaselineColors?.Header.DropdownBackgroundHover">
+                                        @foreach (var dropdownItem in item?.DropdownLinks ?? Enumerable.Empty<Link>())
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" @Html.Raw(assignedContentItem?.Url() == dropdownItem?.Url ? "aria-current=\"page\"" : string.Empty) href="@dropdownItem?.Url" target="@dropdownItem?.Target" style="--bs-dropdown-link-color:@design?.BaselineColors?.Header.Link; --bs-dropdown-link-hover-color:@design?.BaselineColors?.Header.LinkHover; --bs-dropdown-link-active-color: @design?.BaselineColors?.Header.LinkHover">
+                                                    @{
+                                                        RenderLinkContent(dropdownItem);
+                                                    }
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a class="menu-link" @Html.Raw(assignedContentItem?.Url() == item?.MainLink?.Url ? "aria-current=\"page\"" : string.Empty) href="@item?.MainLink?.Url" target="@item?.MainLink?.Target">
+                                        @{
+                                            RenderLinkContent(item?.MainLink);
+                                        }
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+                @{
+                    var headerButtons = settings?.Header?.FirstOrDefault(e => e.Content.ContentType.Alias == "headerBlock")
+                    ?.Content.Value<BlockListModel>("headerButtons")?.Select(x => x.Content).OfType<HeaderButtonBlock>()
+                    ?? Enumerable.Empty<HeaderButtonBlock>();
+                    RenderHeaderButtons(headerButtons);
+                }
+            </div>
+        </div>
+        <a href="#" class="open-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="sr-only">Open Mobile Nav</span>
+        </a>
+    </div>
+</nav>
+@functions {
+    private void RenderLinkContent(Link? link)
+    {
+        <span class="d-inline-flex gap-2 align-items-center">
+            @link?.Name
+            @if (link?.Target == "_blank")
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                </svg>
+            }
+        </span>
+    }
+    private void RenderHeaderButtons(IEnumerable<HeaderButtonBlock> headerButtons)
+    {
+        foreach (var button in headerButtons)
+        {
+            <a class="btn btn-primary mt-2 mt-lg-0 ms-lg-3 @(button.Size == "Large" ? "btn-lg" : button.Size == "Small" ? "btn-sm" : "")" href="@button?.Link?.Url" target="@button?.Link?.Target">@button?.Link?.Name</a>
+        }
+    }
+}

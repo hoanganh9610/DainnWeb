@@ -1,0 +1,23 @@
+@using PageBuilder.Core.Controllers
+@using PageBuilder.Core.Models
+@inherits UmbracoViewPage<EmailInputFieldModel>
+<form asp-controller="@nameof(FormsDataController).Replace("Controller", "")" asp-action="@nameof(FormsDataController.EmailInputFieldSubmit)" class="my-3" data-ajax="true" data-ajax-method="POST" data-ajax-failure="submitFailure" data-ajax-begin="submitBegin" data-ajax-success="submitSuccess">
+    <div class="input-group-with-btn mb-1">
+        <input asp-for="FormName" type="hidden">
+        <input asp-for="SiteId" type="hidden">
+        <input asp-for="Email" class="form-control">
+        <button class="btn btn-primary btn-icon btn-icon-sm" type="submit">
+            <span class="js-submit-init">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                    <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+                </svg>
+            </span>
+            <span class="js-submit-busy spinner-border spinner-border-sm position-absolute" style="display: none;" aria-hidden="true"></span>
+        </button>
+    </div>
+    <div class="input-group lead-sm mb-2">
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <span class="submit-message js-submit-message-success text-success pt-2 mb-0" style="display: none;">Success!</span>
+        <span class="submit-message js-submit-message-failure text-danger pt-2 mb-0" style="display: none;">Failed!</span>
+    </div>
+</form>

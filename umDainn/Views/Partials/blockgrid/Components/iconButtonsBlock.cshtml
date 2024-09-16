@@ -1,0 +1,38 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<IconButtonsBlock>>
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks;
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    var buttons = Model?.Content?.Buttons?.Select(x => x.Content).OfType<IconButtonsItem>() ?? Enumerable.Empty<IconButtonsItem>();
+    var alignmentClass = Model?.Content.HorizontalAlignment == "Right" ?
+    "justify-content-end" : (Model?.Content.HorizontalAlignment == "Center" ? "justify-content-center" : string.Empty);
+}
+<ul class="list-unstyled list-icons d-flex flex-wrap my-3 @alignmentClass" style="gap: 16px;">
+    @{
+        var lastButton = buttons.LastOrDefault();
+        foreach (var button in buttons)
+        {
+            if (!string.IsNullOrWhiteSpace(button?.Link?.Url))
+            {
+                if (!string.IsNullOrEmpty(button.BackgroundColor)
+                && (design?.BaselineColors?.Background.TryGetValue(button.BackgroundColor, out var value) ?? false))
+                {
+                    backgroundColor = value;
+                }
+                <li>
+                    <a class="d-flex align-items-center justify-content-center border rounded-circle" style="border-color: #@backgroundColor; width: 48px; height: 48px;" href="@button.Link.Url" target="@button.Link.Target">
+                        @{
+                            var icon = button.Icon;
+                            if (icon is not null)
+                            {
+                                <span class="social" style="display: block; width: 24px; height: 24px; background-size: contain; background-position: center; transition: all 0.3s;
+                                                                                                             background-image: url(@icon?.GetCropUrl(width: 38, height: 38));"></span>
+                            }
+                        }
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>

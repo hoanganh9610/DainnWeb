@@ -1,0 +1,35 @@
+<section class="card-feature" ng-controller="featuresListBlockController" ng-style="{
+    'background-color': '#' + selectedBackground[block.data.backgroundColor],
+    '--has-bright-contrast': block.data.contrast.value === 'ffffff' ? 'white' : ''
+   }" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row" ng-class="{'flex-row-reverse': block.data.flipHorizontally == 1}">
+            <div class="col-md-6">
+                <div class="img-holder">
+                    {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+                    <!-- ng-style="{'border-radius': borderRadius + 'px'}" -->
+                    <img class="w-100 h-100 object-fit-cover" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=1300" alt="{{mediaItem.name}}">
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center" ng-class="{'justify-content-md-start': block.data.flipHorizontally == 1, 'justify-content-md-end': block.data.flipHorizontally != 1}">
+                <div class="content-holder mb-4 mb-md-0">
+                    <h3 class="h3 mb-3">{{block.data.headline}}</h3>
+                    <div ng-bind-html="block.data.richText.markup | safe_html"></div>
+                    <a class="btn btn-md" ng-class="{
+                            'btn-primary': block.data.variant === 'Primary' || block.data.variant === '' || block.data.variant === undefined,
+                            'btn-outline-primary': block.data.variant === 'Secondary'
+                       }" ng-if="block.data.link[0].name">{{block.data.link[0].name}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

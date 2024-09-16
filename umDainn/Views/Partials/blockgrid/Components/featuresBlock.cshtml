@@ -1,0 +1,67 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<FeaturesBlock>>
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks;
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+    var features = Model?.Content?.AdditionalFeatures?.Select(x => x.Content).OfType<AdditionalFeature>() ?? Enumerable.Empty<AdditionalFeature>();
+    var rowClass = "";
+    if (features.Count() == 2)
+    {
+        rowClass = "row-cols-md-2";
+    }
+    else if (features.Count() > 2 && features.Count() <= 3)
+    {
+        rowClass = "row-cols-md-3";
+    }
+    else if (features.Count() >= 4)
+    {
+        rowClass = "row-cols-md-4";
+    }
+    else
+    {
+        rowClass = "row-cols-md-1";
+    }
+}
+<section class="section-features py-md-10 py-lg-11" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    <div class="container">
+        <div class="text-center lead-sm">@Model?.Content.RichText</div>
+        <h2 class="h2 text-center">@Model?.Content.Headline</h2>
+        <div class="row row-cols-1 @(rowClass)">
+            @{
+                foreach (var feature in features)
+                {
+                    <div class="col">
+                        <div class="card-feature-sm" @(hasBrightContrast ? "bright-contrast" : "") style="@(string.IsNullOrEmpty(feature.IconSbackground) || (!design?.BaselineColors?.Background.ContainsKey(feature.IconSbackground) ?? false) ? string.Empty : "background-color: #" + design?.BaselineColors?.Background[feature.IconSbackground])">
+                            @{
+                                var image = feature.Image;
+                                if (image is not null)
+                                {
+                                    var altText = image.Value<string>("altText");
+                                    if (string.IsNullOrWhiteSpace(altText))
+                                    {
+                                        altText = image.Name;
+                                    }
+                                    <div class="img-holder mb-4">
+                                        <img class="@(image.Value<string>("umbracoExtension") == "svg" ? "feature-icon-svg" : string.Empty)" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 96)" alt="@altText">
+                                    </div>
+                                }
+                            }
+                            <h3 class="h5 mb-3">@feature.Headline</h3>
+                            <div class="text-holder">
+                                @feature.RichText
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

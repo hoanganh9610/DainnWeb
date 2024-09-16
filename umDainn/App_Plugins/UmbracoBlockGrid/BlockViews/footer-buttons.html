@@ -1,0 +1,15 @@
+<ul class="list-unstyled d-flex mb-0">
+    <li ng-class="{'me-3': !$last}" ng-repeat="smb in block.data.socialMediaButtons.contentData">
+        <a ng-if="smb.link[0].url" class="social-holder link-body-emphasis">
+            {{icon = (smb.icon[0].mediaKey | mediaItemResolver); ""}}
+            <span ng-if="icon !== null" class="social" style=" display: block;
+            width: 20px;
+            height: 20px;
+            margin-bottom: 5px;
+            background-size: contain;
+            background-position: center;
+            transition: all 0.3s;" ng-style="{ 'background-image': 'url(' + icon.mediaLink + '?width=38&height=38)', 'margin-bottom': footerOption == 0 ? '0' : '5px' }">
+            </span>
+        </a>
+    </li>
+</ul>

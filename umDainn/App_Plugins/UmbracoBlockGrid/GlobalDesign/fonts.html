@@ -1,0 +1,56 @@
+﻿<div ng-controller="fontsController" class="fonts-property-editor">
+    <p>The fonts are integrated from the Google Fonts library. To find the most suitable for you follow 
+        <a class="btn-link -underline" href="https://fonts.google.com/" target="_blank">https://fonts.google.com</a>
+    </p>
+    <div class="accordion ui-sortable" id="fonts-accordion" ui-sortable="sortableOptions" ng-model="model.value">
+        <div class="accordion-group" ng-repeat="fontSetting in model.value track by fontSetting.guid">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#font-{{$index}}">
+                    {{fontDetails = getFontDetails(fontSetting.fontFamily); ""}}
+                    <span ng-style="getStyle(fontSetting)">
+                        {{fontSetting.fontFamily}}, {{fontDetails.category}}, {{fontSetting.fontStyle}}, {{fontSetting.fontWeight}}
+                    </span>
+                </a>
+                <div class="umb-block-list__block--actions" style="right: 64px;">
+                    <button type="button" class="btn-reset umb-outline action --move" title="Move" style="pointer-events: none;"> <umb-icon icon="icon-navigation" class="handle"> </umb-icon> </button>
+                </div>
+                <div class="umb-block-list__block--actions">
+                    <button type="button" class="btn-reset umb-outline action --delete" ng-disabled="model.value.length <= 1" ng-click="removeFontSetting(fontSetting)" title="Delete"> <umb-icon icon="icon-trash"></umb-icon> </button>
+                </div>
+            </div>
+            <div id="font-{{$index}}" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span4">
+                                <div class="colour-item">
+                                    <label for="fontFamily_{{$index}}" class="control-label">Font Family</label><br />
+                                    <select id="fontFamily_{{$index}}" name="fontFamily_{{$index}}" ng-options="font.family as (font.family + ', ' + font.category) for font in fonts" ng-model="fontSetting.fontFamily" ng-change="onFontFamilyChange(fontSetting)"></select>
+                                    <input type="hidden" value="{{fontDetails.category}}" ng-model="fontSetting.fontCategory" />
+                                </div>
+                                <div class="colour-item">
+                                    <label for="fontStyle_{{$index}}" class="control-label">Font Style</label><br />
+                                    <select id="fontStyle_{{$index}}" name="fontStyle_{{$index}}" ng-options="style for style in getObjectKeys(fontDetails.variants)" ng-model="fontSetting.fontStyle"></select>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="fontWeight_{{$index}}" class="control-label">Font Weight</label><br />
+                                    <select id="fontWeight_{{$index}}" name="fontWeight_{{$index}}" ng-options="weight for weight in fontDetails.variants[fontSetting.fontStyle]" ng-model="fontSetting.fontWeight"></select>
+                                </div>
+                            </div>
+                            <div class="span8" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background:#ffffff;" ng-style="getStyle(fontSetting)">
+                                        <p>The quick brown fox jumps over the lazy dog.</p>
+                                        <p>Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz</p>
+                                        <p>0 1 2 3 4 5 6 7 8 9</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <umb-button action="addFontSetting()" label="Add Font Setting" button-style="[placeholder, block]"></umb-button>
+</div>

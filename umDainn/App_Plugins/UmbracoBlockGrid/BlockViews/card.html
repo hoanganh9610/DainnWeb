@@ -1,0 +1,131 @@
+<style>
+    button {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        text-align: left;
+        padding: 0;
+        user-select: none;
+        border: none;
+        font-family: var(--bs-body-font-family);
+    }
+
+    /* Card */
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        color: black;
+        background-color: white;
+    }
+
+    .card .card-media {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+    }
+
+    .card .card-media img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+    }
+
+    .card .card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        font-weight: 300;
+    }
+
+    .card .card-content p {
+        margin: 0;
+    }
+
+    .card.--medium {
+        /* height: auto; */
+        height: 100%;
+    }
+
+    .card.--medium .card-content {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        color: white;
+    }
+
+    .card.--medium .card-content h4 {
+        font-size: 30px;
+    }
+
+    .card img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .chroma {
+        width: 100%;
+        overflow: auto;
+    }
+
+    .card.base-card[bright-contrast] .card-body h1 {
+        color: white;
+    }
+
+    .card.base-card[bright-contrast] .card-body h2 {
+        color: white;
+    }
+
+    .card.base-card[bright-contrast] .card-body h3 {
+        color: white;
+    }
+
+    .card.base-card[bright-contrast] .card-body h4 {
+        color: white;
+    }
+
+    .card.base-card[bright-contrast] .card-body h5 {
+        color: white;
+    }
+
+    .card.base-card[bright-contrast] .card-body h6 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] .card-body {
+        color: white;
+    }
+</style>
+<div ng-controller="cardBlockController" class="h-100">
+    <style ng-bind="styles"></style>
+    {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+    <button ng-if="block.layout.columnSpan >= 6" class="card base-card h-md-100" ng-class="{'--medium': block.layout.columnSpan >= 6}" type="button" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+        <div class="p-0 card-img-overlay">
+            <img class="card-img h-100 object-fit-cover" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=900" alt="{{mediaItem.name}}">
+        </div>
+        <div class="card-body position-relative p-4 h-100 d-flex flex-column align-items-start justify-content-end" style="min-height: 251px;">
+            <h4 class="text-center">{{block.data.headline}}</h4>
+            <div class="card-text" ng-bind-html="block.data.richText.markup | safe_html"></div>
+            <a class="btn" ng-class="{
+                'btn-primary': block.data.buttonVariant === 'Primary' || block.data.buttonVariant === '' || block.data.buttonVariant === undefined,
+                'btn-outline-primary': block.data.buttonVariant === 'Secondary'
+            }" role="button" ng-if="block.data.link[0].name">{{block.data.link[0].name}}</a>
+        </div>
+    </button>
+    <button ng-if="block.layout.columnSpan < 6" class="card base-card" type="button" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+        <div class="card-media" style="height: 250px;">
+            <img class="card-img-top h-100 object-fit-cover" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=350" alt="{{mediaItem.name}}">
+        </div>
+        <div class="card-body">
+            <h4 class="text-center">{{block.data.headline}}</h4>
+            <p class="card-text" ng-bind-html="block.data.richText.markup | safe_html"></p>
+            <a class="btn" ng-class="{
+                'btn-primary': block.data.buttonVariant === 'Primary' || block.data.buttonVariant === '' || block.data.buttonVariant === undefined,
+                'btn-outline-primary': block.data.buttonVariant === 'Secondary'
+            }" role="button" ng-if="block.data.link[0].name">{{block.data.link[0].name}}</a>
+        </div>
+    </button>
+</div>

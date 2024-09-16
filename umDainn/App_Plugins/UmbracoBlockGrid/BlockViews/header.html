@@ -1,0 +1,78 @@
+<div class="headerBlock" ng-controller="headerBlockController" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand position-relative has-logo-hover" style="color: var(--bs-navbar-color)" ng-class="{ 'me-0': headerOption == 1 }">
+                {{websiteName}}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="--bs-navbar-toggler-border-color: #400455">
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' width="30px" height="30px">
+                    <path stroke='currentColor' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22' />
+                </svg>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" ng-class="{
+                    'text-center text-lg-right': headerOption == 0,
+                    'justify-content-lg-between text-center': headerOption == 1,
+                    'text-center text-lg-left': headerOption == 2,
+                 }">
+                <ul class="navbar-nav" ng-class="{
+                        'ms-auto': headerOption == 0,
+                        'm-auto mb-2 mb-lg-0': headerOption == 1,
+                        'me-lg-auto mb-2 mb-lg-0': headerOption == 2,
+                    }">
+                    <li class="nav-item me-lg-2 d-inline-flex flex-column align-items-center" ng-repeat="headerLink in block.data.headerLinks.contentData" ng-class="{ 'dropdown': headerLink.dropdownLinks.length > 0 }">
+                        <a ng-if="headerLink.dropdownLinks.length == 0 && headerLink.mainLink[0].url" class="nav-link" aria-current="page">
+                            <span class="d-inline-flex gap-1 align-items-center text-nowrap">
+                                {{headerLink.mainLink[0].name}}
+                                <svg ng-if="headerLink.mainLink[0].target === '_blank'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                </svg>
+                            </span>
+                        </a>
+                        <span ng-if="headerLink.dropdownLinks.length > 0" class="d-inline-flex align-items-center">
+                            <a ng-if="headerLink.mainLink[0].url" class="nav-link">
+                                <span class="d-inline-flex gap-1 align-items-center text-nowrap">
+                                    {{headerLink.mainLink[0].name}}
+                                    <svg ng-if="headerLink.mainLink[0].target === '_blank'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                        <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <span class="d-inline-flex toggle-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </span>
+                        </span>
+                        <ul ng-if="headerLink.dropdownLinks.length > 0" class="dropdown-menu">
+                            <li ng-repeat="dropdownLink in headerLink.dropdownLinks">
+                                <a ng-if="dropdownLink.url" class="dropdown-item">
+                                    <span class="d-inline-flex gap-1 align-items-center text-nowrap">
+                                        {{dropdownLink.name}}
+                                        <svg ng-if="dropdownLink.target === '_blank'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <a ng-repeat="headerButton in block.data.headerButtons.contentData" class="btn btn-primary mt-2 mt-lg-0 ms-lg-3" ng-class="{'btn-lg': headerButton.size == 'Large', 'btn-sm': headerButton.size == 'Small'}">
+                    {{headerButton.link[0].name}}
+                </a>
+            </div>
+        </div>
+    </nav>
+    <section>
+        <h1 class="h1 text-center">
+            Banner Headline
+        </h1>
+        <div class="text-center">
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
+        </div>
+    </section>
+</div>

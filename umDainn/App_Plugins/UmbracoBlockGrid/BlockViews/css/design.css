@@ -1,0 +1,175 @@
+:host {
+    {{design.typography.text.getFontStyles()}}
+    color: #{{design.baselineColors.content.text}};
+}
+
+.lead-lg{
+    font-size: {{design.typography.text.desktop + 4}}px;  
+}
+
+.lead-md{
+    font-size: {{design.typography.text.desktop}}px;  
+}
+
+.lead-sm{
+    font-size: {{design.typography.text.desktop - 2}}px;  
+}
+
+h1, .h1 { 
+    color: #{{design.baselineColors.content.h1}}; 
+    {{design.typography.h1.getFontStyles()}}
+}
+            
+h2, .h2 { 
+    color: #{{design.baselineColors.content.h2}};
+    {{design.typography.h2.getFontStyles()}}
+}
+            
+h3, .h3 { 
+    color: #{{design.baselineColors.content.h3}};
+    {{design.typography.h3.getFontStyles()}} 
+}
+            
+h4, .h4 { 
+    color: #{{design.baselineColors.content.h4}}; 
+    {{design.typography.h4.getFontStyles()}}
+}
+
+h5, .h5 {
+    color: #{{design.baselineColors.content.h5}};
+    {{design.typography.h5.getFontStyles()}}
+}
+
+h6, .h6 { 
+    color: #{{design.baselineColors.content.h6}}; 
+    {{design.typography.h6.getFontStyles()}} 
+}
+
+.card-number  {
+    {{design.typography.text.getFontStyles()}}
+    color: #{{design.baselineColors.content.text}};
+    box-shadow: {{design.dropShadow.cards.offsetX}}px {{design.dropShadow.cards.offsetY}}px {{design.dropShadow.cards.blurRadius}}px rgba({{design.hexToRgb(design.dropShadow.cards.color).rgbString}}, {{design.dropShadow.cards.opacity}}%);
+}
+
+
+.btn.btn-primary {
+    color: #{{design.baselineColors.button.text}};
+    background: #{{design.baselineColors.button.fill}};  
+    border-color: #{{design.baselineColors.button.stroke}};  
+    font-family: {{design.typography.button.font.fontFamily}}, {{design.typography.button.font.fontCategory}};
+    border-radius: {{design.cornerRadius.buttons}}px!important;
+    font-style: {{design.typography.button.font.fontStyle}}
+}
+
+.btn.btn-primary:hover{
+    color: #{{design.baselineColors.button.textHover}};
+    background: #{{design.baselineColors.button.fillHover}};
+    border-color: #{{design.baselineColors.button.strokeHover}};
+}
+
+.btn-primary {
+    --bs-btn-color: #{{design.baselineColors.button.text}};
+    --bs-btn-hover-color: #{{design.baselineColors.button.textHover}};  
+    --bs-btn-bg: #{{design.baselineColors.button.fill}};  
+    --bs-btn-hover-bg: #{{design.baselineColors.button.fillHover}};  
+    --bs-btn-border-color: #{{design.baselineColors.button.stroke}};  
+    --bs-btn-hover-border-color: #{{design.baselineColors.button.strokeHover}};
+    --bs-btn-font-family: {{design.typography.button.font.fontFamily}}, {{design.typography.button.font.fontCategory}};
+    --bs-btn-font-weight: {{design.typography.button.font.fontWeight}};
+    font-style: {{design.typography.button.font.fontStyle}}
+}
+
+.btn.btn-outline-primary{
+    color: #{{design.baselineColors.buttonSecondary.text}};
+    border-color: #{{design.baselineColors.buttonSecondary.stroke}};  
+    font-family: {{design.typography.button.font.fontFamily}}, {{design.typography.button.font.fontCategory}};
+    font-style: {{design.typography.button.font.fontStyle}};
+    border-radius: {{design.cornerRadius.buttons}}px!important;
+}
+
+.btn.btn-outline-primary:hover{
+    color: #{{design.baselineColors.buttonSecondary.textHover}};
+    background: #{{design.baselineColors.buttonSecondary.fillHover}};
+    border-color: #{{design.baselineColors.buttonSecondary.strokeHover}};
+}
+
+.btn.btn-outline-primary:active{
+    color: #{{design.baselineColors.buttonSecondary.textHover}};
+    background: #{{design.baselineColors.buttonSecondary.fillHover}};
+    border-color: #{{design.baselineColors.buttonSecondary.strokeHover}};
+}
+
+.card-number h1,
+.card-number .h1 {
+    color: #{{design.baselineColors.content.h1}}; 
+    {{design.typography.h1.getFontStyles()}}
+}
+
+.card-number h2 { 
+    color: #{{design.baselineColors.content.h2}};
+    {{design.typography.h2.getFontStyles()}}
+}
+
+.card-number h3 {
+    color: #{{design.baselineColors.content.h3}};
+    {{design.typography.h3.getFontStyles()}}
+}
+
+.card-number h4 { 
+    color: #{{design.baselineColors.content.h4}};
+    {{design.typography.h4.getFontStyles()}}
+}
+
+.card-number h6 { 
+    color: #{{design.baselineColors.content.h6}};
+    {{design.typography.h6.getFontStyles()}}
+}  
+
+.card-number a { 
+    color: #{{design.baselineColors.content.link}};
+}
+
+.card-number a:hover { 
+    color: #{{design.baselineColors.content.linkHover}};
+}
+
+.card-feature-sm {
+    {{design.typography.text.getFontStyles()}}
+    color:  #{{design.baselineColors.content.text}};
+    box-shadow: {{design.dropShadow.cards.offsetX}}px {{design.dropShadow.cards.offsetY}}px {{design.dropShadow.cards.blurRadius}}px rgba({{design.hexToRgb(design.dropShadow.cards.color).rgbString}}, {{design.dropShadow.cards.opacity}}%);
+}
+
+.card-case{
+    color: #{{design.baselineColors.content.text}};
+    border-radius: {{design.cornerRadius.picturesAndVideo}}px;
+}
+
+.card-case .h3 {
+    color: #{{design.baselineColors.content.h3}};
+    {{design.typography.h3.getFontStyles()}}
+}
+
+.roadmap{
+    color: var(--has-bright-contrast, #{{design.baselineColors.content.text}});
+}
+
+.roadmap .h3{
+    color: var(--has-bright-contrast, #{{design.baselineColors.content.h3}});
+}
+
+.roadmap a { 
+    color: #{{design.baselineColors.content.link}};
+}
+
+.roadmap a:hover { 
+    color: #{{design.baselineColors.content.linkHover}};
+}
+
+.border-radius{
+    border-radius: {{design.cornerRadius.picturesAndVideo}}px;
+}
+
+.card-number.style-2{
+    {{design.typography.text.getFontStyles()}}
+    color: #{{design.baselineColors.content.text}};
+}

@@ -1,0 +1,20 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Berobotstxt>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = null;
+    Context.Response.ContentType = "text/plain";
+}
+@Html.Raw(Model.Value<string>("crawlInstructions"))
+
+@if (Model.HasValue("sitemapXmllocation"))
+{
+    @* try catch added to avoid errors with sites that originally used content picker rather than multi url picker *@
+    try{
+        foreach (var item in Model.Value<IEnumerable<IPublishedContent>>("sitemapXmllocation"))
+        {
+            @("Sitemap: " + item.Url(mode:UrlMode.Absolute))
+        }
+    }
+    catch{}
+}

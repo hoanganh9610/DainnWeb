@@ -1,0 +1,37 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<FeatureBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<div class="card-feature-sm" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    @{
+        var image = Model.Content.Image;
+        if (image is not null)
+        {
+            var altText = image.Value<string>("altText");
+            if (string.IsNullOrWhiteSpace(altText))
+            {
+                altText = image.Name;
+            }
+            <div class="img-holder mb-4">
+                <img class="@(image.Value<string>("umbracoExtension") == "svg" ? "" : string.Empty)" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 96)" alt="@altText">
+            </div>
+        }
+    }
+    <h3 class="h5 mb-3">@Model.Content.Headline</h3>
+    <div class="text-holder">
+        @Model.Content.RichText
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Name))
+    {
+        <a class="btn @(Model.Content.Variant == "Secondary" ? "btn-outline-primary" : "btn-primary") btn-md mt-4" href="@Model.Content.Link.Url" target="@Model.Content.Link.Target">@Model.Content.Link.Name</a>
+    }
+</div>

@@ -1,0 +1,41 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<CaseStudyCardBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<div class="card-case style-1 border-radius" style="@(noBackgroundColor ? "nobackgroundcolor" : null)" @(hasBrightContrast ? "bright-contrast" : "")>
+    @{
+        var image = Model?.Content.Image;
+        if (image is not null)
+        {
+            var altText = image.Value<string>("altText");
+            if (string.IsNullOrWhiteSpace(altText))
+            {
+                altText = image.Name;
+            }
+            <div class="img-holder mb-4 border-radius">
+                <img class="border-radius" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 650)" alt="@altText">
+            </div>
+        }
+    }
+    <p class="lead-sm mb-0">@Model?.Content.CompanyName</p>
+    <h3 class="h3 card-title">@Model?.Content.ProjectName</h3>
+    @if (Model?.Content.Tags != null && Model.Content.Tags.Any())
+    {
+        <ul class="list-unstyled">
+            @foreach (var tag in Model?.Content.Tags ?? Enumerable.Empty<string>())
+            {
+                <li style="background-color: #@backgroundColor">@tag</li>
+            }
+        </ul>
+    }
+    <a class=" stretched-link" @(!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Url) ? Html.Raw($"href=\"{Model?.Content?.Link?.Url}\" target=\"{Model?.Content?.Link?.Target}\"") : string.Empty)></a>
+</div>

@@ -1,0 +1,20 @@
+<div class="swiper-slide mw-lg mw-lg-6xl h-auto" ng-repeat="review in block.data.clientReviews.contentData">
+	<div class="flex-shrink-0 me-6 d-inline-block w-100 h-100">
+		<div class="rounded-5 overflow-hidden h-100" ng-style="review.backgroundColor !== '' ? {'background-color': '#' + selectedBackground[review.backgroundColor]} : {}" ng-attr-card-contrast="{{review.contrast && review.contrast.value === 'ffffff' ? 'true' : undefined}}">
+			<div class="row mx-0 h-100">
+				<div class="col-12 col-lg-4 p-0">
+					{{mediaItem = (review.image[0].mediaKey | mediaItemResolver); ""}}
+					<img class="img-fluid d-block h-100 w-100 rounded-5" style="object-fit: cover;" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}" alt="...">
+				</div>
+				<div class="col-12 col-lg-8 p-0 align-self-md-center flex-grow-1 d-flex flex-column">
+					<div class="py-6 py-lg-12 px-6 px-md-8 w-100 mx-auto flex-grow-1 d-flex flex-column">
+						<div class="mb-8 text-holder" ng-bind-html="review.review.markup | safe_html">
+						</div>
+						<span class="d-block fw-medium lead-sm mt-auto mt-lg-0">{{review.clientName}}</span>
+						<span class="d-block lead-sm">{{review.position}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

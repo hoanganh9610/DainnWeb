@@ -1,0 +1,41 @@
+<style>
+    .hero2 {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    slot {
+        cursor: initial;
+        user-select: auto;
+        --umb-block-grid--text-color: #fff;
+        --umb-block-grid--text-color-hover: #9fbfff;
+    }
+</style>
+<div class="section-hero-2" ng-controller="heroBlockController" ng-click="block.edit()" ng-focus="block.focus" ng-style="{
+         'background-color': '#' + selectedBackground[block.data.backgroundColor],
+     }" ng-class="{'direction-vertical': block.data.imagePositioning === 'Below the title', 'direction-horizontal': block.data.imagePositioning !== 'Below the title'}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 ng-style="{
+                    'text-align': block.data.headlineAlignment === 'Right' ? 'end' :
+                                block.data.headlineAlignment === 'Center' ? 'center' : 'start'
+                }" class="h1 mb-2">
+                {{block.data.headline}}
+            </h1>
+            <umb-block-grid-render-area-slots ng-click="$event.stopPropagation()"></umb-block-grid-render-area-slots>
+        </div>
+        <div class="hero-background" ng-style="{
+            'background-image': 'url('+(block.data.image[0].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=1920)'
+        }">
+        </div>
+    </div>
+</div>

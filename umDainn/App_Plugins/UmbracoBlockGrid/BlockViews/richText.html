@@ -1,0 +1,29 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--bs-body-font-family);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .rich-text iframe {
+        max-width: 100%;
+    }
+</style>
+<div ng-controller="richTextBlockController">
+    <style ng-bind="styles"></style>
+    <div data-bs-theme="light" class="rich-text" ng-click="block.edit()" ng-focus="block.focus" ng-style="{'min-height': block.data.richText ? '' : '30px'}" ng-bind-html="block.data.richText.markup | safe_html" style="--my-text-columns: {{block.layout.columnSpan === 12 ? 2 : 1}}">
+    </div>
+</div>

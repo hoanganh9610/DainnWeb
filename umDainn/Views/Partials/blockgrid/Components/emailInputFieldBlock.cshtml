@@ -1,0 +1,11 @@
+﻿@using PageBuilder.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<EmailInputFieldBlock>>
+
+<div>
+    @await Html.PartialAsync("blockgrid/emailInputFieldForm",
+            new EmailInputFieldModel
+    {
+        FormName = Model.Content.FormName ?? string.Empty,
+        SiteId = Umbraco.AssignedContentItem.Root().Key
+    })
+</div>

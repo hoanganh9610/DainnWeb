@@ -1,0 +1,76 @@
+<div class="footerBlock" ng-controller="footerBlockController" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <footer ng-if="footerOption == 0" class="site-footer pt-5 pb-4">
+        <div class="container text-center text-lg-start">
+            <div ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-links.html'" onload="columnClass = 'col-lg-2'" class="row justify-content-md-center">
+            </div>
+            <div class="d-flex flex-column-reverse flex-lg-row align-items-center justify-content-between pt-4 border-top">
+                <p class="mb-0">{{block.data.copyrightMessage}}</p>
+                <ng-include src="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-buttons.html'"></ng-include>
+            </div>
+        </div>
+    </footer>
+    <footer ng-if="footerOption == 1" class="site-footer footer-2 pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 d-flex flex-column align-items-center align-items-lg-start me-lg-auto mb-3">
+                    <h5>Socials</h5>
+                    <ng-include src="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-buttons.html'"></ng-include>
+                </div>
+                <div class="col-lg-9">
+                    <div ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-links.html'" onload="columnClass = 'col-lg-3 text-center text-lg-start justify-content-lg-start'" ng-class="{ 'justify-content-lg-end': block.data.footerLinks.contentData.length <= 4 }" class="row">
+                    </div>
+                </div>
+            </div>
+            <div class="border-top pt-4 text-center">
+                <p class="mb-0">{{block.data.copyrightMessage}}</p>
+            </div>
+        </div>
+    </footer>
+    <footer ng-if="footerOption == 2" class="site-footer footer-3 pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row flex-column-reverse flex-lg-row">
+                <div class="col-lg-9">
+                    <div ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-links.html'" onload="columnClass = 'col-lg-3 text-center text-lg-start justify-content-lg-start'" class="row">
+                    </div>
+                </div>
+                <div class="col-lg-3 d-flex flex-column align-items-center align-items-lg-start ms-lg-auto mb-3">
+                    <h5>Socials</h5>
+                    <ng-include src="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-buttons.html'"></ng-include>
+                </div>
+            </div>
+            <div class="border-top pt-4 text-center">
+                <p class="mb-0">{{block.data.copyrightMessage}}</p>
+            </div>
+        </div>
+    </footer>
+    <footer ng-if="footerOption == 3" class="site-footer footer-3 pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row flex-column-reverse flex-lg-row">
+                {{logoItem = (design.logo.logo[0].mediaKey | mediaItemResolver); ""}}
+                {{logoHoverItem = (design.logo.logoHover[0].mediaKey | mediaItemResolver); ""}}
+                <div class="col-lg-2" ng-class="{'navbar align-items-start ps-3 pt-0': logoItem === null}">
+                    <div ng-if="logoItem !== null" class="d-inline-block position-relative" ng-class="{'has-logo-hover': logoHoverItem !== null}">
+                        <img ng-if="design.logo.useCrop.includes('Use crop for Logo')" class="logo-default" ng-src="{{logoItem.mediaLink}}?{{getCropUrl(design.logo.logo[0].crops[0])}}" />
+                        <img ng-if="!design.logo.useCrop.includes('Use crop for Logo')" class="logo-default" ng-src="{{logoItem.mediaLink}}?rmode=pad&ranchor=left&width=98&height=46&format=png&bgcolor=transparent" />
+                        <img ng-if="logoHoverItem !== null && design.logo.useCrop.includes('Use crop for Logo Hover')" class="logo-hover" ng-src="{{logoHoverItem.mediaLink}}?{{getCropUrl(design.logo.logoHover[0].crops[0])}}" />
+                        <img ng-if="logoHoverItem !== null && !design.logo.useCrop.includes('Use crop for Logo Hover')" class="logo-hover" ng-src="{{logoHoverItem.mediaLink}}?rmode=pad&ranchor=left&width=98&height=46&format=png&bgcolor=transparent" />
+                    </div>
+                    <div ng-if="logoItem === null" class="navbar-brand" style="color: var(--footer-link-color);">
+                        {{websiteName}}
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/footer-links.html'" onload="columnClass = 'col-lg-3 text-center text-lg-start justify-content-lg-start'" class="row">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <umb-block-grid-render-area-slots ng-click="$event.stopPropagation()"></umb-block-grid-render-area-slots>
+                </div>
+            </div>
+            <div class="border-top pt-4 text-center">
+                <p class="mb-0">{{block.data.copyrightMessage}}</p>
+            </div>
+        </div>
+    </footer>
+</div>

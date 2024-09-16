@@ -1,0 +1,7 @@
+.effects-block .imgs-holder {
+  display: flex;
+}
+
+.effects-block .imgs-holder .img-holder:not(:last-child) {
+  margin-right: 20px;
+}

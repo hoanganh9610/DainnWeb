@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<RichTextBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+<style>
+	.rich-text iframe {
+		max-width: 100%;
+	}
+
+	[bright-contrast] .rich-text h1,
+	[bright-contrast] .rich-text h2,
+	[bright-contrast] .rich-text h3,
+	[bright-contrast] .rich-text h4,
+	[bright-contrast] .rich-text h5,
+	[bright-contrast] .rich-text h6 {
+		color: white;
+	}
+</style>
+<div class="rich-text mb-2">@Model.Content.RichText</div>

@@ -1,0 +1,200 @@
+﻿{
+  "id": "ByteAnt.ByteEditor.Components",
+  "name": "ByteEditor.Components by ByteAnt",
+  "allowPackageTelemetry": true,
+  "dashboards": [
+    {
+      "alias": "ByteAnt.ContentDashboard",
+      "view": "~/App_Plugins/UmbracoBlockGrid/backoffice/dashboards/contentDashboard.html",
+      "sections": [ "content" ],
+      "weight": -10
+    }
+  ],
+  "propertyEditors": [
+    {
+      "alias": "ByteAnt.ColorPalette",
+      "name": "ByteAnt Color Palette",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/colorPalette.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    },
+    {
+      "alias": "ByteAnt.BaselineColors",
+      "name": "ByteAnt Baseline Colors",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/baselineColors.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    },
+    {
+      "alias": "ByteAnt.ColorPicker",
+      "name": "ByteAnt Color Picker",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/colorPicker.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "ByteAnt.Fonts",
+      "name": "ByteAnt Fonts",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/fonts.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    },
+    {
+      "alias": "ByteAnt.Typography",
+      "name": "ByteAnt Typography",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/typography.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    },
+    {
+      "alias": "ByteAnt.SiteHeader",
+      "name": "ByteAnt Site Header",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/siteHeader.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "ByteAnt.SiteFooter",
+      "name": "ByteAnt Site Footer",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/siteFooter.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "ByteAnt.BlogLayout",
+      "name": "ByteAnt Blog Layout",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/blogLayout.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "ByteAnt.CornerRadius",
+      "name": "ByteAnt Corner Radius",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/cornerRadius.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    },
+    {
+      "alias": "ByteAnt.DropShadow",
+      "name": "ByteAnt Drop Shadow",
+      "icon": "icon-autofill",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/dropShadow.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      }
+    }
+  ],
+  "contentApps": [
+    {
+      "name": "Forms Data",
+      "alias": "formsData",
+      "weight": -110,
+      "icon": "icon-inbox-full",
+      "view": "~/App_Plugins/UmbracoBlockGrid/FormsData/formsData.html",
+      "show": [
+        "+content/formsData"
+      ]
+    }
+  ],
+  "css": [
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/css/colors.css",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/css/fonts.css",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/css/headerFooter.css",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/css/effects.css",
+    "~/App_Plugins/UmbracoBlockGrid/backoffice/dashboards/contentDashboard.css"
+  ],
+  "javascript": [
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/libraries/bootstrap.min.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/featuresWithDescriptionsBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/teamMembersBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/textCardWithButton2Block.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/banner3Block.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/accordionBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/buttonsGroupBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/breadcrumbBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/callToActionBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/cardBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/cardWithNumber.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/carouselBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/caseStudyCardBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/caseStudy2CardBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/clientReviewBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/clientReview2Block.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/clientReview3Block.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/clientsAndPartnersBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/dividerBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/embedCode.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/featureBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/featuresListBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/footerBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/headerBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/headlineBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/heroBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/iconButtonsBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/imageBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/layoutSections.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/pricingCardBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/richTextBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/roadmapBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/serviceBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/teamMemberBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/BlockViews/js/controllers/textCardWithButtonBlock.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/baselineColors.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/blogLayout.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/colorPalette.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/colorPicker.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/cornerRadius.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/designFolderListView.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/dropShadow.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/fonts.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/typography.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/siteHeader.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/siteFooter.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/GlobalDesign/js/globalDesign.service.js",
+    "~/App_Plugins/UmbracoBlockGrid/backoffice/tours/websiteName.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/backoffice/tours/pageName.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/backoffice/tours/designName.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/backoffice/dashboards/contentDashboard.controller.js",
+    "~/App_Plugins/UmbracoBlockGrid/Licenses/js/licenses.service.js",
+    "~/App_Plugins/UmbracoBlockGrid/Licenses/js/trialFormOverlayController.js",
+    "~/App_Plugins/UmbracoBlockGrid/FormsData/js/formsData.controller.js"
+  ]
+}

@@ -1,0 +1,37 @@
+﻿<div class="suggestion" ng-controller="colorPaletteController">
+    <div class="umb-property-editor db" ng-class="{'is-preview': preview}" model="preValue" pre-values="model.preValues" is-pre-value="true">
+        <div ng-class="{'umb-property-editor--preview': preview}" disable-tabindex="preview">
+            <div>
+                <div class="umb-property-editor umb-prevalues-multivalues umb-colors" ng-controller="Umbraco.PrevalueEditors.MultiColorPickerController as vm">
+                    <div class="control-group  umb-prevalues-multivalues__add color-picker-preval">
+                        <div class="umb-prevalues-multivalues__left">
+                            <umb-color-picker ng-model="newColor" options="options" on-hide="vm.hide(color)" on-show="vm.show(color)" on-change="vm.change(color)" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false"></umb-color-picker>
+                            <label val-highlight="false">#{{newColor}}</label>
+                            <input type="text" name="newLabel" ng-model="newLabel" focus-when="false" class="umb-property-editor color-label ng-pristine ng-untouched ng-valid ng-hide ng-empty" localize="placeholder" ng-show="vm.labelEnabled" placeholder="Label" aria-hidden="true" aria-invalid="false">
+                        </div>
+                        <div class="umb-prevalues-multivalues__right">
+                            <button type="button" class="btn btn-info add" ng-if="vm.editItem == null && getColorsCount() < 64" ng-click="vm.add($event)" style=""><localize key="general_add">Add</localize></button>
+                            <button type="button" class="btn btn-info add" ng-if="vm.editItem != null" ng-click="vm.add($event)"><localize key="general_update" class="ng-isolate-scope">Update</localize></button>
+                            <button type="button" class="btn btn-link" ng-if="vm.editItem != null" ng-click="vm.cancel($event)"><localize key="general_cancel" class="ng-isolate-scope">Cancel</localize></button>
+                        </div>
+                    </div>
+                    <div ui-sortable="sortableOptions" ng-model="model.value" class="ng-pristine ng-untouched ng-valid ui-sortable ng-not-empty" aria-invalid="false">
+                        <div class="control-group umb-prevalues-multivalues__listitem color-picker-preval ui-sortable-handle" ng-repeat="item in model.value track by $id(item)">
+                            <umb-icon icon="icon-navigation" class="handle"></umb-icon>
+                            <div class="umb-prevalues-multivalues__left">
+                                <div class="thumbnail span1" hex-bg-color="{{item.value}}" hex-bg-orig="transparent"></div>
+                                <div class="color-picker-prediv">
+                                    <pre>#{{item.value}}</pre>
+                                </div>
+                            </div>
+                            <div class="umb-prevalues-multivalues__right">
+                                <button type="button" class="umb-node-preview__action umb-node-preview__action--red" ng-click="vm.edit(item, $event)"><localize key="general_edit">Edit</localize></button>
+                                <button type="button" class="umb-node-preview__action umb-node-preview__action--red" ng-click="vm.remove(item, $event)"><localize key="general_remove">Remove</localize></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

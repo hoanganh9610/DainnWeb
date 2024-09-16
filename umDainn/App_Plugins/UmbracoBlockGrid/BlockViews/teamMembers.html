@@ -1,0 +1,39 @@
+<section class="team-members position-relative py-12 py-md-24 bg-light-light overflow-hidden" ng-controller="teamMembersBlockController" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-focus="block.focus" data-bs-theme="light">
+	<style ng-bind="styles"></style>
+	<div class="license-message" ng-if="!licenseIsValid" ng-click="block.edit()">
+		<div class="license-block">
+			<div class="img-holder">
+				<img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+			</div>
+			<div ng-bind-html="message | safe_html" class="content-holder"></div>
+		</div>
+	</div>
+	<div ng-click="block.edit()"></div>
+	<div class="container">
+		<div class="row align-items-center mb-4">
+			<div class="col-12 col-md-6 mb-4 mb-md-8 mb-md-0 text-center text-md-start">
+				<h2 class="h2">{{block.data.title}}</h2>
+			</div>
+			<div class="col-12 col-md-6 mb-4 mb-md-0">
+				<div class="d-flex align-items-center justify-content-center justify-content-md-end swiper-navigations">
+					<button class="me-2 border d-inline-flex align-items-center justify-content-center p-0 rounded-pill swiper-button-prev" style="width: 58px; height: 58px; background: transparent;color:inherit;">
+						<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-1-2">
+							<path d="M10.7051 7.12817L4.15732 13.6759L10.7051 20.2237" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path d="M22.4941 13.6759H4.33949" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+					<button class="border d-inline-flex align-items-center justify-content-center p-0 rounded-pill swiper-button-next" style="width: 58px; height: 58px; background: transparent;color:inherit;">
+						<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-2-2">
+							<path d="M16.2949 7.12817L22.8427 13.6759L16.2949 20.2237" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path d="M4.50586 13.6759H22.6605" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="swiper swiper-team-members">
+			<div class="swiper-wrapper mb-7" ng-click="block.edit()" ng-if="renderSlides" ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/teamMemberItem.html'">
+			</div>
+		</div>
+	</div>
+</section>

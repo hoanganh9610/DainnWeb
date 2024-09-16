@@ -1,0 +1,66 @@
+<div class="forms-data-content-app" ng-controller="formsDataController as vm">
+    <umb-box>
+        <umb-box-content style="min-height: 250px">
+            <umb-tabs-nav tabs="vm.tabs"
+                          on-tab-change="vm.changeTab(tab)">
+            </umb-tabs-nav>
+
+            <umb-tab-content ng-repeat="tab in vm.tabs"
+                             ng-show="tab.active"
+                             tab="tab">
+                <div ng-if="tab.alias === 'formsDataTabOne'" style="position: relative">
+                    <uui-loader ng-if="vm.isLoaderShown" style="height: 200px"></uui-loader>
+                    <table class="table table-hover" ng-if="vm.emailInputFieldFormData">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Form Name</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in vm.emailInputFieldFormData">
+                                <td>{{$index + 1}}</td>
+                                <td>{{row.FormName}}</td>
+                                <td>{{row.Email}}</td>
+                                <td>{{row.Date | date:'medium'}}</td>
+                                <td>{{row.IP}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-if="tab.alias === 'formsDataTabTwo'">
+                    <uui-loader ng-if="vm.isLoaderShown" style="height: 200px"></uui-loader>
+                    <table class="table table-hover" ng-if="vm.contactUsFormData">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Form Name</th>
+                                <th>Full Name</th>
+                                <th>Company</th>
+                                <th>Email</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in vm.contactUsFormData">
+                                <td>{{$index + 1}}</td>
+                                <td>{{row.FormName}}</td>
+                                <td>{{row.FullName}}</td>
+                                <td>{{row.Company}}</td>
+                                <td>{{row.Email}}</td>
+                                <td>{{row.Message}}</td>
+                                <td>{{row.Date | date:'medium'}}</td>
+                                <td>{{row.IP}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </umb-tab-content>
+        </umb-box-content>
+    </umb-box>
+</div>

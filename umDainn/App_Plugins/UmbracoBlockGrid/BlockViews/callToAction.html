@@ -1,0 +1,15 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+<div ng-controller="callToActionBlockController" ng-click="block.edit()" ng-focus="block.focus" class="d-flex" ng-class="{'justify-content-end': block.data.horizontalAlignment === 'Right', 'justify-content-center': block.data.horizontalAlignment === 'Center'}" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <a class="btn mt-2" ng-class="{
+            'btn-lg': block.data.size == 'Large',
+            'btn-sm': block.data.size == 'Small',
+            'btn-primary': block.data.variant === 'Primary' || block.data.variant === '' || block.data.variant === undefined,
+            'btn-outline-primary': block.data.variant === 'Secondary'
+       }" role="button">{{block.data.link[0].name}}</a>
+</div>

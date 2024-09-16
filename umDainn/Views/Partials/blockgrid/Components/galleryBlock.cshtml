@@ -1,0 +1,40 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<GalleryBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Extensions;
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var images = Model?.Content?.Images?.ToList() ?? new List<MediaWithCrops>();
+}
+<section class="section-gallery" style="background-color:#@backgroundColor">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" style="background-image: url(@images[0]?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 456, height: 456))">
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" style="background-image: url(@images[1]?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 456, height: 456))">
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" style="background-image: url(@images[2]?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 456, height: 456))">
+                </div>
+            </div>
+            <div class="col-md-6 mb-2 mb-md-0">
+                <div class="gallery-item" style="background-image: url(@images[3]?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 688, height: 456))">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="gallery-item" style="background-image: url(@images[4]?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 688, height: 456))">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,46 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<FeaturesListBlock>>
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks;
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<section class="card-feature" data-bs-theme="light" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    <div class="container">
+        <div class="row flex-column-reverse flex-md-row @(Model.Content.FlipHorizontally ? "flex-column flex-md-row-reverse" : string.Empty)">
+            <div class="col-md-6">
+                <div class="img-holder">
+                    @{
+                        var image = Model.Content.Image;
+                        if (image is not null)
+                        {
+                            var altText = image.Value<string>("altText");
+                            if (string.IsNullOrWhiteSpace(altText))
+                            {
+                                altText = image.Name;
+                            }
+                            <img class="w-100 h-100 object-fit-cover" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 1300)" alt="@altText">
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-6 d-flex align-items-center @(Model.Content.FlipHorizontally ? "justify-content-md-start" : "justify-content-md-end")">
+                <div class="content-holder mb-4 mb-md-0">
+                    <h3 class="h3 mb-3">@Model.Content.Headline</h3>
+                    <div>@Model.Content.RichText</div>
+                    @if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Name))
+                    {
+                        <a class="btn @(Model.Content.Variant == "Secondary" ? "btn-outline-primary" : "btn-primary") btn-md" href="@Model.Content.Link.Url" target="@Model.Content.Link.Target">@Model.Content.Link.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

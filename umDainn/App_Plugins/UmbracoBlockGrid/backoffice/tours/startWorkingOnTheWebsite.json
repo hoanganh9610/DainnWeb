@@ -1,0 +1,254 @@
+[
+  {
+    "name": "Set the name for your website",
+    "alias": "setTheNameForYourWebsite",
+    "group": "Start working on the website",
+    "groupOrder": 1,
+    "allowDisable": true,
+    "culture": "en-US",
+    "contentType": "",
+    "requiredSections": [ "content", "media" ],
+    "steps": [
+      {
+        "title": "How to name your website",
+        "content": "<p>Let’s add a personal touch to your website.</p>",
+        "type": "intro",
+        "element": null,
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Navigate to the 'Content' section",
+        "content": "<p>In the top bar, locate and click on the <b>'Content'</b> section.</p>",
+        "type": null,
+        "element": "[data-element='section-content']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Go to 'Settings'",
+        "content": "<p>On the left-hand side, you will see the content tree, click on the <b>'Settings'</b> node.</p>",
+        "type": null,
+        "element": "[data-element='tree-root'] + ul",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "#tree [data-element='tree-item-Settings'] a",
+        "customProperties": null
+      },
+      {
+        "title": "Go to the 'Website' tab",
+        "content": "<p>Choose the <b>'Website’</b> tab on the top bar.</p>",
+        "type": null,
+        "element": "[data-element='editor-tab-bar']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "[data-element='tab-website']",
+        "customProperties": null
+      },
+      {
+        "title": "Go to the 'Website Name'",
+        "content": "<p>Locate the field next to <b>'Website name'<b> — enter your website name here. For example, <i>ABC Website Company</i>.</p>",
+        "type": null,
+        "element": "[data-element='property-websiteName']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": null,
+        "view": "/App_Plugins/UmbracoBlockGrid/backoffice/tours/websiteName.html",
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Save and Publish",
+        "content": "<p>Once you are happy with the changes, in the bottom right of the screen, hit <b>'Save and Publish'</b>. Your updates are now live on your site! :-)</p>",
+        "type": null,
+        "element": "[data-element='button-saveAndPublish']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      }
+    ]
+  },
+  {
+    "name": "Upload the favicon",
+    "alias": "uploadTheFavicon",
+    "group": "Start working on the website",
+    "groupOrder": 1,
+    "allowDisable": true,
+    "culture": "en-US",
+    "contentType": "",
+    "requiredSections": [ "content", "media" ],
+    "steps": [
+      {
+        "title": "How to change the favicon",
+        "content": "<p>Let’s add a personal touch to your website.</p>",
+        "type": "intro",
+        "element": null,
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Navigate to the 'Content' section",
+        "content": "<p>In the top bar, locate and click on the <b>'Content'</b> section.</p>",
+        "type": null,
+        "element": "[data-element='section-content']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Go to 'Settings'",
+        "content": "<p>On the left-hand side, you will see the content tree, click on the <b>'Settings'</b> node.</p>",
+        "type": null,
+        "element": "[data-element='tree-root'] + ul",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "#tree [data-element='tree-item-Settings'] a",
+        "customProperties": null
+      },
+      {
+        "title": "Go to the 'Website' tab",
+        "content": "<p>Choose the <b>'Website’</b> tab on the top bar.</p>",
+        "type": null,
+        "element": "[data-element='editor-tab-bar']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "[data-element='tab-website']",
+        "customProperties": null
+      },
+      {
+        "title": "Go to the 'Favicon' property",
+        "content": "<p>Locate the field next to <b>Favicon</b>, and click on the upload functionality.</p>",
+        "type": null,
+        "element": "[data-element='property-favicon']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "#button_favicon",
+        "customProperties": null
+      },
+      {
+        "title": "Choose the icon",
+        "content": "<p>Choose the icon or upload a new one by clicking <b>Upload</b> on the top right corner of the screen. Click <b>Select</b> on the bottom right corner to apply the icon.</p>",
+        "type": null,
+        "element": "#umbracoMainPageBody > umb-backoffice-icon-registry > div.umb-editors > div > div:nth-child(1) > div > div",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "[data-element='editor-footer'] > div > div > umb-button:nth-child(2) > div > button",
+        "customProperties": null
+      },
+      {
+        "title": "Save and Publish",
+        "content": "<p>Once you are happy with the changes, in the bottom right of the screen, hit <b>'Save and Publish'</b>. Your updates are now live on your site! :-)</p>",
+        "type": null,
+        "element": "[data-element='button-saveAndPublish']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      }
+    ]
+  },
+  {
+    "name": "View your website",
+    "alias": "viewYourWebsite",
+    "group": "Start working on the website",
+    "groupOrder": 1,
+    "allowDisable": true,
+    "culture": "en-US",
+    "contentType": "",
+    "requiredSections": [ "content", "media" ],
+    "steps": [
+      {
+        "title": "How to view your site",
+        "content": "<p>Let's preview what users will see when they visit your website.</p>",
+        "type": "intro",
+        "element": null,
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Navigate to the 'Content' section",
+        "content": "<p>In the top bar, locate and click on the <b>'Content'</b> section.</p>",
+        "type": null,
+        "element": "[data-element='section-content']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Go to the 'Home' page",
+        "content": "<p>On the left-hand side, you will see the content node tree, click on the <b>'Home'</b> page.</p>",
+        "type": null,
+        "element": "[data-element='tree-root'] + ul",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "#tree [data-element='tree-item-Home'] a",
+        "customProperties": null
+      },
+      {
+        "title": "Click on the 'Info' content app",
+        "content": "<p>In the top right corner, locate <b>'Info'</b>. Click on this to view detailed information about this node, including, a link to view it on the front end.</p>",
+        "type": null,
+        "element": "[data-element='sub-view-umbInfo']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": null,
+        "customProperties": null
+      },
+      {
+        "title": "Click on the 'Link' provided",
+        "content": "<p>Under <b>'Links'</b> click one of the hyperlinks provided to view your site.</p>",
+        "type": null,
+        "element": "[data-element='node-info-urls']",
+        "elementPreventClick": false,
+        "backdropOpacity": 0.6,
+        "event": "click",
+        "view": null,
+        "eventElement": "[data-element='node-info-urls'] a:first-child",
+        "customProperties": null
+      }
+    ]
+  }
+]

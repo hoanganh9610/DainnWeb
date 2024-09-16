@@ -1,0 +1,35 @@
+﻿@using PageBuilder.Core.Models
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<RoadmapBlock>>
+@{
+    var milestones = Model.Content.Milestones?.Select(x => x.Content).OfType<Milestone>() ?? Enumerable.Empty<Milestone>();
+}
+<div class="roadmap">
+    @foreach (var milestone in milestones)
+    {
+        <div class="roadmap-item">
+            <div class="icon-holder">
+                @{
+                    var image = milestone.Image;
+                    if (image is not null && image.Value<string>("umbracoExtension") == "svg")
+                    {
+                        <object type="image/svg+xml" data="@image.Url()"></object>
+                    }
+                    if (image is not null && image.Value<string>("umbracoExtension") != "svg")
+                    {
+                        var altText = image.Value<string>("altText");
+                        if (string.IsNullOrWhiteSpace(altText))
+                        {
+                            altText = image.Name;
+                        }
+                        <img class="w-100" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 64)" alt="@altText">
+                    }
+                }
+            </div>
+            <div>
+                <h3 class="h3 mb-3">@milestone.Headline</h3>
+                <p>@milestone.Description</p>
+            </div>
+        </div>
+    }
+</div>

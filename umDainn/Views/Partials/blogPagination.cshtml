@@ -1,0 +1,73 @@
+﻿@using PageBuilder.Core.Models
+@{
+    var model = Model as BlogPageViewModel;
+    if (model == null) { return; }
+
+    var page = model.Page;
+    var postsPerPage = model?.Value<int>("postsPerPage") ?? 0;
+    var totalPages = postsPerPage > 0 ? (model?.TotalPosts + postsPerPage - 1) / postsPerPage ?? 1 : 1;
+
+    if (page > totalPages) { page = totalPages; }
+
+    int prevLink = page - 1;
+    int nextLink = page + 1;
+}
+
+<ul class="pagination align-items-center">
+    <li class="page-item">
+        @if (page > 1)
+        {
+            <a class="page-link rounded-2 mx-2 d-flex align-items-center" href="?page=@prevLink" style="height: 38px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                </svg>
+            </a>
+        }
+        else
+        {
+            <a class="page-link rounded-2 mx-2 d-flex align-items-center disabled" style="height: 38px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                </svg>
+            </a>
+        }
+    </li>
+    @for (int i = 1; i <= totalPages; i++)
+    {
+        if (totalPages <= 5 || i == 1 || i == totalPages || (i >= page - 2 && i <= page + 2))
+        {
+            <li class="page-item mx-2">
+                @if (page == i)
+                {
+                    <a class="page-link rounded-2 active">@i</a>
+                }
+                else
+                {
+                    <a class="page-link rounded-2" href="?page=@i">@i</a>
+                }
+            </li>
+        }
+        else if (i == page - 3 || i == page + 3)
+        {
+            <li class="page-item mx-2"><span class="ellipsis">&mldr;</span></li>
+        }
+    }
+    <li class="page-item">
+        @if (page < totalPages)
+        {
+            <a class="page-link rounded-2 mx-2 d-flex align-items-center" href="?page=@nextLink" style="height: 38px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </a>
+        }
+        else
+        {
+            <a class="page-link rounded-2 mx-2 disabled d-flex align-items-center" style="height: 38px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </a>
+        }
+    </li>
+</ul>

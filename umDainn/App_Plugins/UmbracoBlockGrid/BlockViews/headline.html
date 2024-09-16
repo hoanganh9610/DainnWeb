@@ -1,0 +1,22 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--bs-body-font-family);
+    }
+</style>
+<div ng-controller="headlineBlockController" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div ng-repeat="level in [1, 2, 3, 4, 5, 6]" ng-click="block.edit()" ng-focus="block.focus"
+         ng-if="block.data.headlineLevel[0] === 'H' + level" 
+         ng-bind-html="'&lt;h' + level + ' class=&quot;h' + level + ' mb-2 mb-md-3 ' + (block.data.horizontalAlignment === 'Right' ? 'text-end' : block.data.horizontalAlignment === 'Center' ? 'text-center' : '') + '&quot;&gt;' + block.data.headlineText + '&lt;/h' + level + '&gt;' | safe_html">
+    </div>
+</div>

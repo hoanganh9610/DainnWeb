@@ -1,0 +1,15 @@
+<div class="roadmap" ng-controller="roadmapBlockController" ng-click="block.edit()" ng-focus="block.focus">
+    <style ng-include="'/App_Plugins/UmbracoBlockGrid/BlockViews/css/design.css'"></style>
+    <div class="roadmap-item" ng-repeat="milestone in block.data.milestones.contentData">
+        <div class="icon-holder">
+            {{mediaItem = (milestone.image[0].mediaKey | mediaItemResolver); ""}}
+            <ng-include ng-if="mediaItem !== null && mediaItem.properties[0].config.fileExtensions[0].value === 'svg'" src="mediaItem.mediaLink">
+            </ng-include>
+            <img ng-if="mediaItem !== null && mediaItem.properties[0].config.fileExtensions[0].value !== 'svg'" class="w-100" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=64" />
+        </div>
+        <div>
+            <h3 class="h3 mb-3">{{milestone.headline}}</h3>
+            <div ng-bind-html="milestone.description.markup | safe_html"></div>
+        </div>
+    </div>
+</div>

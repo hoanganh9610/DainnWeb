@@ -1,0 +1,838 @@
+﻿@using PageBuilder.Core.Models
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Strings
+@using Umbraco.Cms.Web.Common.PublishedModels
+@using Microsoft.Extensions.Configuration
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlogPageViewModel>
+@inject IConfiguration _configuration
+@inject IShortStringHelper _shortStringHelper
+@{
+    Layout = "Layout.cshtml";
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+   
+    var design = Umbraco.AssignedContentItem.AncestorsOrSelf<BlockGrid>()
+            .OrderByDescending(x => x.Level)
+            .FirstOrDefault(x => x.OverrideDesign != null)?.OverrideDesign as Design
+            ?? (isMultisiteSetup
+                ? Umbraco.AssignedContentItem.Root().Descendant<DesignFolder>()?.SelectedDesign
+                : (Umbraco.ContentAtRoot()
+                    .FirstOrDefault(x => x.ContentType.Alias.InvariantEquals("designFolder")) as DesignFolder)?.SelectedDesign) as Design;
+
+    var postsPerPage = Model?.Value<int>("postsPerPage");
+    var blogPageBestArticles = Model?.Value<IEnumerable<IPublishedContent>>("blogPageBestArticles")?.Cast<BeblogPost>().ToList() ?? [];
+    var dateFormat = "dd MMM yyyy";
+    var firstPost = Model?.BlogPosts?.FirstOrDefault() as BeblogPost;
+    var breadcrumbs = Model?.Breadcrumbs(false).ToList() ?? [];
+    var blogLayout = Model?.Value<int>("blogLayout");
+
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model?.Value<string>("backgroundColor"))
+    && (design?.BaselineColors?.Background.TryGetValue(Model?.Value<string>("backgroundColor")!, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var contrast = Model?.Value<string>("contrast");
+    var defaultCover = Model?.Value<MediaWithCrops>("defaultCoverImage");
+    var defaultCoverAltText = defaultCover?.Value<string>("altText");
+    if (string.IsNullOrWhiteSpace(defaultCoverAltText))
+    {
+        defaultCoverAltText = defaultCover?.Name;
+    }
+}
+
+<div @(contrast == "ffffff" ? $"blog-bright-contrast" : "") class="page_blog pt-3 pb-5" style="@(string.IsNullOrEmpty(backgroundColor) ? "" : $"background: #{backgroundColor};")">
+@switch (blogLayout)
+{
+    case 0:
+            <div class="container">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb breadcrumb-chevron align-items-center">
+                        @{
+                            for (int i = 0; i < breadcrumbs.Count; i++)
+                            {
+                                <li class="breadcrumb-item d-inline-flex">
+                                    @if (i == 0)
+                                    {
+                                        <a href="@breadcrumbs[i].Url()" class="d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"></path>
+                                            </svg>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="fw-semibold text-decoration-none" href="@breadcrumbs[i].Url()">@breadcrumbs[i].Name</a>
+                                    }
+                                </li>
+                            }
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model?.Name
+                        </li>
+                    </ol>
+                </nav>
+                <div class="row gx-xxl-5">
+                    <div class="col-lg-8">
+                        @if (Model?.AllTags.Any() ?? false)
+                        {
+                            <div class="shadow-sm p-4 mb-4 d-lg-none">
+                                <h4 class="h4 pb-3 mb-4 border-bottom contrast-support">Categories</h4>
+                                <div class="d-flex flex-wrap">
+                                    <a href="@Model?.Url()" class="btn @(string.IsNullOrEmpty(Model?.SelectedTag) ? "btn-primary" : "btn-light") me-2 mb-2">All</a>
+                                    @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                    {
+                                        <a class="btn @(Model?.SelectedTag == tag?.Text ? "btn-primary" : "btn-light") me-2 mb-2"
+                                           href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            @foreach (BeblogPost post in Model?.BlogPosts ?? Enumerable.Empty<IPublishedContent>())
+                            {
+                                <div class="col-md-6 mb-4">
+                                    <div class="shadow-sm overflow-hidden h-100 d-flex flex-column card-blog card-style-1">
+                                        <a href="@post?.Url()" class="img-holder d-flex">
+                                            @{
+                                                var image = post?.CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <img loading="lazy" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 412, height: 257)" class="w-100 h-100 object-fit-cover" alt="@altText">
+                                                }
+                                                else
+                                                {
+                                                    <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 412, height: 257)" class="w-100 h-100 object-fit-cover" alt="@defaultCoverAltText">
+                                                }
+                                            }
+                                        </a>
+                                        <div class="p-4">
+                                            <ul class="list-unstyled d-flex align-items-center">
+                                               @{
+                                                    var tags = post?.Tags?.ToList() ?? [];
+                                                    if (tags.Count > 0)
+                                                    {
+                                                        <li class="d-inline-flex align-items-center me-3">
+                                                            <span class="d-inline-flex me-1 contrast-support">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                                                    <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+                                                                    <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043z" />
+                                                                </svg>
+                                                            </span>
+                                                            <ul class="list-unstyled d-flex flex-wrap">
+                                                                @for (int i = 0; i < tags.Count; i++)
+                                                                {
+                                                                    <li class="me-1">
+                                                                        <a class="text-decoration-none" href="@Model?.Url()tag/@(tags[i]?.ToUrlSegment(_shortStringHelper))/">@tags[i]</a>@(i < tags.Count - 1 ? "," : string.Empty)
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                }
+                                                <li class="d-inline-flex align-items-center flex-shrink-0 contrast-support">
+                                                    <span class="d-inline-flex me-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                                        </svg>
+                                                    </span>
+                                                    @post?.PostDate.ToString(dateFormat)
+                                                </li>
+                                            </ul>
+                                            <h3 class="h5 contrast-support"><a href="@post?.Url()" class="hover-underline" style="color:inherit;">@post?.Name</a></h3>
+                                            <p class="card-short-text contrast-support">@post?.Excerpt</p>
+                                        </div>
+                                        <div class="p-4 border-top d-flex justify-content-end mt-auto">
+                                            <a href="@post?.Url()" class="btn btn-primary">Read more</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="d-flex justify-content-center pt-4 mb-4">
+                                <nav aria-label="Page navigation">
+                                    @if (postsPerPage > 0 && (Model?.TotalPosts + postsPerPage - 1) / postsPerPage > 1)
+                                    {
+                                        @await Html.PartialAsync("blogPagination", Model)
+                                    }
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        @if (blogPageBestArticles.Count > 0)
+                        {
+                            <div class="shadow-sm p-4 mb-4">
+                                <h4 class="h4 pb-3 mb-4 border-bottom contrast-support">Best Articles</h4>
+                                @for (int i = 0; i < blogPageBestArticles.Count; i++)
+                                {
+                                    <div class="d-flex @(i < blogPageBestArticles.Count - 1 ? "mb-3" : string.Empty)">
+                                        <div class="flex-shrink-0 me-3" style="width: 70px; height: 70px;">
+                                            @{
+                                                var image = blogPageBestArticles[i].CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@altText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" class="w-100 h-100 object-fit-cover" alt="@defaultCoverAltText">
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                        <div>
+                                            <span class="contrast-support"> @blogPageBestArticles[i]?.PostDate.ToString(dateFormat) </span>
+                                            <h3 class="h6 contrast-support"><a href="@blogPageBestArticles[i].Url()" class="hover-underline" style="color:inherit;">@blogPageBestArticles[i].Name</a></h3>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        @if (Model?.AllTags.Any() ?? false)
+                        {
+                            <div class="shadow-sm p-4 mb-4 d-none d-lg-block">
+                                <h4 class="h4 pb-3 mb-4 border-bottom contrast-support">Categories</h4>
+                                <div class="d-flex flex-wrap">
+                                    <a href="@Model?.Url()" class="btn @(string.IsNullOrEmpty(Model?.SelectedTag) ? "btn-primary" : "btn-light") me-2 mb-2">All</a>
+                                    @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                    {
+                                        <a class="btn @(Model?.SelectedTag == tag?.Text ? "btn-primary" : "btn-light") me-2 mb-2"
+                                           href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        break;
+    case 1:
+            <div class="container">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb breadcrumb-chevron align-items-center">
+                        @{
+                            for (int i = 0; i < breadcrumbs.Count; i++)
+                            {
+                                <li class="breadcrumb-item d-inline-flex">
+                                    @if (i == 0)
+                                    {
+                                        <a href="@breadcrumbs[i].Url()" class="d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"></path>
+                                            </svg>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="fw-semibold text-decoration-none" href="@breadcrumbs[i].Url()">@breadcrumbs[i].Name</a>
+                                    }
+                                </li>
+                            }
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model?.Name
+                        </li>
+                    </ol>
+                </nav>
+                <div class="row gx-xxl-5">
+                    <div class="col-lg-8">
+                        @if (Model?.AllTags.Any() ?? false)
+                        {
+                            <div class="d-lg-none">
+                                <h4 class="h4 mb-3 contrast-support">Categories</h4>
+                                <div class="list-group mb-4">
+                                    <a href="@Model?.Url()" class="list-group-item list-group-item-action @(string.IsNullOrEmpty(Model?.SelectedTag) ? "active" : "")">All</a>
+                                    @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                    {
+                                        <a class="list-group-item list-group-item-action @(Model?.SelectedTag == tag?.Text ? "active" : "")"
+                                        href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @foreach (BeblogPost post in Model?.BlogPosts ?? Enumerable.Empty<IPublishedContent>())
+                        {
+                            <div class="card-blog card-style-2 pb-4 border-bottom mb-5">
+                                @{
+                                    var image = post.CoverImage;
+                                    if (image is not null)
+                                    {
+                                        var altText = image.Value<string>("altText");
+                                        if (string.IsNullOrWhiteSpace(altText))
+                                        {
+                                            altText = image.Name;
+                                        }
+                                        <a href="@post?.Url()" class="img-holder d-flex mb-3">
+                                            <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 848)" class="w-100 h-100 object-fit-cover rounded-2" alt="@altText">
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@post?.Url()" class="img-holder d-flex mb-3">
+                                            <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 848)" class="w-100 h-100 object-fit-cover rounded-2" alt="@defaultCoverAltText">
+                                        </a>
+                                    }
+                                }
+                                <div class="px-4">
+                                    <h3 class="h5 contrast-support"><a href="@post?.Url()" class="hover-underline" style="color:inherit;">@post?.Name</a></h3>
+                                    <p class="card-short-text contrast-support">@post?.Excerpt</p>
+                                    <ul class="list-unstyled d-flex flex-wrap mb-0 contrast-support">
+                                        @{
+                                            var tags = post?.Tags?.ToList() ?? [];
+                                            if (tags.Count > 0)
+                                            {
+                                                <li class="d-inline-flex align-items-center me-3">
+                                                    <span class="d-inline-flex me-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+                                                            <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+                                                            <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043z" />
+                                                        </svg>
+                                                    </span>
+                                                    <ul class="list-unstyled d-flex flex-wrap">
+                                                        @for (int i = 0; i < tags.Count; i++)
+                                                        {
+                                                            <li class="me-1">
+                                                                <a class="text-decoration-none" href="@Model?.Url()tag/@(tags[i]?.ToUrlSegment(_shortStringHelper))/">@tags[i]</a>@(i < tags.Count - 1 ? "," : string.Empty)
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        }
+                                        <li class="d-inline-flex align-items-center">
+                                            <span class="d-inline-flex me-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"></path>
+                                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"></path>
+                                                </svg>
+                                            </span>
+                                            @post?.PostDate.ToString(dateFormat)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        <div class="d-flex justify-content-center pt-4 mb-4">
+                            <nav aria-label="Page navigation">
+                                @if (postsPerPage > 0 && (Model?.TotalPosts + postsPerPage - 1) / postsPerPage > 1)
+                                {
+                                    @await Html.PartialAsync("blogPagination", Model)
+                                }
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        @if (Model?.AllTags.Any() ?? false)
+                        {
+                            <div class="d-none d-lg-block">
+                                <h4 class="h4 mb-3 contrast-support">Categories</h4>
+                                <div class="list-group mb-4">
+                                    <a href="@Model?.Url()" class="list-group-item list-group-item-action @(string.IsNullOrEmpty(Model?.SelectedTag) ? "active" : "")">All</a>
+                                    @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                    {
+                                        <a class="list-group-item list-group-item-action @(Model?.SelectedTag == tag?.Text ? "active" : "")"
+                                        href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (blogPageBestArticles.Count > 0)
+                        {
+                            <div class="shadow-sm p-4 mb-4">
+                                <h4 class="h4 pb-3 mb-4 border-bottom contrast-support">Best Articles</h4>
+                                @for (int i = 0; i < blogPageBestArticles.Count; i++)
+                                {
+                                    <div class="d-flex @(i < blogPageBestArticles.Count - 1 ? "mb-3" : string.Empty)">
+                                        <div class="flex-shrink-0 me-3" style="width: 70px; height: 70px;">
+                                            @{
+                                                var image = blogPageBestArticles[i].CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@altText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@defaultCoverAltText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                        <div>
+                                            <span class="contrast-support"> @blogPageBestArticles[i]?.PostDate.ToString(dateFormat) </span>
+                                            <h3 class="h6 contrast-support"><a href="@blogPageBestArticles[i].Url()" class="hover-underline" style="color:inherit;">@blogPageBestArticles[i].Name</a></h3>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        break;
+    case 2:
+            <div class="container">
+               <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb breadcrumb-chevron align-items-center">
+                        @{
+                            for (int i = 0; i < breadcrumbs.Count; i++)
+                            {
+                                <li class="breadcrumb-item d-inline-flex">
+                                    @if (i == 0)
+                                    {
+                                        <a href="@breadcrumbs[i].Url()" class="d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"></path>
+                                            </svg>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="fw-semibold text-decoration-none" href="@breadcrumbs[i].Url()">@breadcrumbs[i].Name</a>
+                                    }
+                                </li>
+                            }
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model?.Name
+                        </li>
+                    </ol>
+                </nav>
+                @if (Model?.AllTags.Any() ?? false)
+                    {
+                        <div class="d-lg-none">
+                            <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Categories</h4>
+                            <div class="d-flex flex-column mb-4 contrast-support">
+                                <a href="@Model?.Url()" class="color-inherit contrast-support hover-underline @(string.IsNullOrEmpty(Model?.SelectedTag) ? "fw-bold text-decoration-underline" : "fw-medium") mb-2">All</a>
+                                @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                {
+                                    <a class="color-inherit contrast-support hover-underline @(Model?.SelectedTag == tag?.Text ? "fw-bold text-decoration-underline" : "fw-medium") mb-2"
+                                       href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                @{
+                    if (firstPost is not null)
+                    {
+                        <div class="card-blog card-lg mb-5 pb-0 pb-md-4">
+                            <div class="row gx-xxl-5 flex-column-reverse flex-md-row align-items-center">
+                                <div class="col-md-6">
+                                    <h3 class="h1 fw-bold card-title contrast-support">
+                                        <a href="@firstPost?.Url()" class="hover-underline" style="color:inherit;">@firstPost?.Name</a>
+                                    </h3>
+                                    <ul class="list-unstyled contrast-support">
+                                        @{
+                                            var firstTag = firstPost?.Tags?.FirstOrDefault();
+                                            if (!string.IsNullOrEmpty(firstTag))
+                                            {
+                                                <li class="text-uppercase">@firstTag</li>
+                                            }
+                                        }
+                                        @if (firstPost?.PostDate is not null)
+                                            {
+                                            var daysPassed = Math.Abs((DateTime.Now - firstPost.PostDate).Days);
+                                            if (daysPassed > 30)
+                                            {
+                                                <li class="text-capitalize">@firstPost.PostDate.ToString(dateFormat)</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="text-lowercase">@daysPassed day@(daysPassed > 1 ? "s" : string.Empty) ago</li>
+                                            }
+                                        }
+                                    </ul>
+                                    <div class="text-holder">
+                                        <p class="card-short-text contrast-support">@firstPost?.Excerpt</p>
+                                    </div>
+                                    <a href="@firstPost?.Url()" class="link-more">Details</a>
+                                </div>
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    @{
+                                        var image = firstPost?.CoverImage;
+                                        if (image is not null)
+                                        {
+                                            var altText = image.Value<string>("altText");
+                                            if (string.IsNullOrWhiteSpace(altText))
+                                            {
+                                                altText = image.Name;
+                                            }
+                                            <img loading="lazy" class="rounded-3 w-100 h-auto" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 624, height: 389)" alt="@altText">
+                                        }
+                                        else
+                                        {
+                                            <img loading="lazy" class="rounded-3 w-100 h-auto" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 624, height: 389)" alt="@defaultCoverAltText">
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <div class="row gx-xxl-5">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            @foreach (BeblogPost post in Model?.BlogPosts?.Skip(1) ?? Enumerable.Empty<IPublishedContent>())
+                            {
+                                <div class="col-md-6 mb-4">
+                                    <div class="card-blog card-md">
+                                        <a href="@post?.Url()" class="img-holder">
+                                            @{
+                                                var image = post?.CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 416, height: 259)" alt="@altText">
+                                                }
+                                                else
+                                                {
+                                                    <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 416, height: 259)" class="w-100 h-100 object-fit-cover rounded-2" alt="@defaultCoverAltText">
+                                                }
+                                            }
+                                        </a>
+                                        <ul class="list-unstyled">
+                                            @{
+                                                var firstTag = post?.Tags?.FirstOrDefault();
+                                                if (!string.IsNullOrEmpty(firstTag))
+                                                {
+                                                    <li>@firstTag</li>
+                                                }
+                                            }
+                                            @if (post?.PostDate is not null)
+                                            {
+                                                var daysPassed = Math.Abs((DateTime.Now - post.PostDate).Days);
+                                                if (daysPassed > 30)
+                                                {
+                                                    <li class="text-capitalize fw-normal">@post.PostDate.ToString(dateFormat)</li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="text-lowercase fw-normal">@daysPassed day@(daysPassed > 1 ? "s" : string.Empty) ago</li>
+                                                }
+                                            }
+                                        </ul>
+                                        <div class="content-holder">
+                                            <h3 class="h5 card-title contrast-support">
+                                                <a href="@post?.Url()" style="color:inherit;" class="hover-underline">
+                                                    @post?.Name
+                                                </a>
+                                            </h3>
+                                            <a href="@post?.Url()" class="link-more">Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="d-flex justify-content-center pt-4 mb-4">
+                                <nav aria-label="Page navigation">
+                                    @if (postsPerPage > 0 && (Model?.TotalPosts + postsPerPage - 1) / postsPerPage > 1)
+                                    {
+                                        @await Html.PartialAsync("blogPagination", Model)
+                                    }
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        @if (Model?.AllTags.Any() ?? false)
+                        {
+                            <div class="mb-4 d-none d-lg-block">
+                                <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Categories</h4>
+                                <div class="d-flex flex-column">
+                                    <a href="@Model?.Url()" class="color-inherit contrast-support hover-underline @(string.IsNullOrEmpty(Model?.SelectedTag) ? "fw-bold text-decoration-underline" : "fw-medium") mb-2">All</a>
+                                    @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                    {
+                                        <a class="color-inherit contrast-support hover-underline @(Model?.SelectedTag == tag?.Text ? "fw-bold text-decoration-underline" : "fw-medium") mb-2" 
+                                           href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (blogPageBestArticles.Count > 0)
+                        {
+                            <div class="mb-4">
+                                <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Best Articles</h4>
+                                @for (int i = 0; i < blogPageBestArticles.Count; i++)
+                                {
+                                    <div class="d-flex @(i < blogPageBestArticles.Count - 1 ? "mb-3" : string.Empty)">
+                                        <div class="flex-shrink-0 me-3" style="width: 70px; height: 70px;">
+                                            @{
+                                                var image = blogPageBestArticles[i].CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@altText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@defaultCoverAltText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                        <div>
+                                            <span class="contrast-support"> @blogPageBestArticles[i]?.PostDate.ToString(dateFormat) </span>
+                                            <h3 class="h6 contrast-support"><a href="@blogPageBestArticles[i].Url()" class="hover-underline" style="color:inherit;">@blogPageBestArticles[i].Name</a></h3>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        break;
+    case 3:
+            <div class="container">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb breadcrumb-chevron align-items-center">
+                        @{
+                            for (int i = 0; i < breadcrumbs.Count; i++)
+                            {
+                                <li class="breadcrumb-item d-inline-flex">
+                                    @if (i == 0)
+                                    {
+                                        <a href="@breadcrumbs[i].Url()" class="d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"></path>
+                                            </svg>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="fw-semibold text-decoration-none" href="@breadcrumbs[i].Url()">@breadcrumbs[i].Name</a>
+                                    }
+                                </li>
+                            }
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model?.Name
+                        </li>
+                    </ol>
+                </nav>
+                @if (Model?.AllTags.Any() ?? false)
+                {
+                        <div class="mb-4 d-lg-none">
+                            <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Categories</h4>
+                            <div class="d-flex flex-column">
+                                <a href="@Model?.Url()" class="color-inherit contrast-support hover-underline @(string.IsNullOrEmpty(Model?.SelectedTag) ? "fw-bold text-decoration-underline" : "fw-medium") mb-2">All</a>
+                                @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                {
+                                    <a class="color-inherit contrast-support hover-underline @(Model?.SelectedTag == tag?.Text ? "fw-bold text-decoration-underline" : "fw-medium") mb-2"
+                                    href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                }
+                            </div>
+                        </div>
+                }
+                @{
+                    if (firstPost is not null)
+                    {
+                        <div class="card-blog card-lg mb-5 pb-0 pb-md-4">
+                            <div class="row gx-xxl-5 flex-column-reverse flex-md-row align-items-center">
+                                <div class="col-md-6">
+                                    <h3 class="h1 fw-bold card-title contrast-support">
+                                        <a href="@firstPost?.Url()" class="hover-underline" style="color:inherit;">@firstPost?.Name</a>
+                                    </h3>
+                                    <ul class="list-unstyled contrast-support">
+                                         @{
+                                            var firstTag = firstPost?.Tags?.FirstOrDefault();
+                                            if (!string.IsNullOrEmpty(firstTag))
+                                            {
+                                                <li class="text-uppercase">@firstTag</li>
+                                            }
+                                        }
+                                        @if (firstPost?.PostDate is not null)
+                                            {
+                                            var daysPassed = Math.Abs((DateTime.Now - firstPost.PostDate).Days);
+                                            if (daysPassed > 30)
+                                            {
+                                                <li class="text-capitalize">@firstPost.PostDate.ToString(dateFormat)</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="text-lowercase">@daysPassed day@(daysPassed > 1 ? "s" : string.Empty) ago</li>
+                                            }
+                                        }
+                                    </ul>
+                                    <p class="card-short-text contrast-support">@firstPost?.Excerpt</p>
+                                    <a href="@firstPost?.Url()" class="link-more">Details</a>
+                                </div>
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    @{
+                                        var image = firstPost?.CoverImage;
+                                        if (image is not null)
+                                        {
+                                            var altText = image.Value<string>("altText");
+                                            if (string.IsNullOrWhiteSpace(altText))
+                                            {
+                                                altText = image.Name;
+                                            }
+                                            <img loading="lazy" class="rounded-3 w-100 h-auto" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 624, height: 389)" alt="@altText">
+                                        }
+                                        else
+                                        {
+                                            <img loading="lazy" class="rounded-3 w-100 h-auto" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 624, height: 389)" alt="@defaultCoverAltText">
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <div class="row gx-xxl-5">
+                    <div class="col-lg-8">
+                        @foreach (BeblogPost post in Model?.BlogPosts?.Skip(1) ?? Enumerable.Empty<IPublishedContent>())
+                        {
+                            <div class="card-blog card-md row gx-0 align-items-md-center pb-3 mb-3 border-bottom">
+                                <div class="col-md-4 mb-1 mb-md-0">
+                                    @{
+                                        var image = post?.CoverImage;
+                                        if (image is not null)
+                                        {
+                                            var altText = image.Value<string>("altText");
+                                            if (string.IsNullOrWhiteSpace(altText))
+                                            {
+                                                altText = image.Name;
+                                            }
+                                            <a href="@post?.Url()" class="img-holder d-flex">
+                                                <img loading="lazy" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 320, height: 199)" alt="@altText">
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@post?.Url()" class="img-holder">
+                                                <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 320, height: 199)" class="w-100 h-100 object-fit-cover rounded-2" alt="@defaultCoverAltText">
+                                            </a>
+                                        }
+                                    }
+                                    <ul class="list-unstyled ms-0" style="transform: translateY(-50%) translateX(10px);">
+                                        @{
+                                            var firstTag = post?.Tags?.FirstOrDefault();
+                                            if (!string.IsNullOrEmpty(firstTag))
+                                            {
+                                                <li>@firstTag</li>
+                                            }
+                                        }
+                                        @if (post?.PostDate is not null)
+                                        {
+                                            var daysPassed = Math.Abs((DateTime.Now - post.PostDate).Days);
+                                            if (daysPassed > 30)
+                                            {
+                                                <li class="text-capitalize fw-normal">@post.PostDate.ToString(dateFormat)</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="text-lowercase fw-normal">@daysPassed day@(daysPassed > 1 ? "s" : string.Empty) ago</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="content-holder col-md-8 pb-md-3">
+                                    <h3 class="h5 card-title contrast-support">
+                                        <a href="@post?.Url()" style="color:inherit;" class="hover-underline">
+                                            @post?.Name
+                                        </a>
+                                    </h3>
+                                    <p class="card-short-text contrast-support">@post?.Excerpt</p>
+                                    <a href="@post?.Url()" class="link-more">Details</a>
+                                </div>
+                            </div>
+                        }
+                        <div class="d-flex justify-content-center pt-4 mb-4">
+                            <nav aria-label="Page navigation">
+                                @if (postsPerPage > 0 && (Model?.TotalPosts + postsPerPage - 1) / postsPerPage > 1)
+                                {
+                                    @await Html.PartialAsync("blogPagination", Model)
+                                }
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        @if (Model?.AllTags.Any() ?? false)
+                            {
+                                <div class="mb-4 d-none d-lg-block">
+                                    <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Categories</h4>
+                                    <div class="d-flex flex-column">
+                                        <a href="@Model?.Url()" class="color-inherit contrast-support hover-underline @(string.IsNullOrEmpty(Model?.SelectedTag) ? "fw-bold text-decoration-underline" : "fw-medium") mb-2">All</a>
+                                        @foreach (var tag in Model?.AllTags ?? Enumerable.Empty<TagModel>())
+                                        {
+                                            <a class="color-inherit contrast-support hover-underline @(Model?.SelectedTag == tag?.Text ? "fw-bold text-decoration-underline" : "fw-medium") mb-2"
+                                            href="@Model?.Url()tag/@(tag?.Text?.ToUrlSegment(_shortStringHelper))/">@tag?.Text</a>
+                                        }
+                                    </div>
+                                </div>
+                        }
+                        @if (blogPageBestArticles.Count > 0)
+                        {
+                            <div class="mb-4">
+                                <h4 class="h4 pb-3 mb-3 border-bottom contrast-support">Best Articles</h4>
+                                @for (int i = 0; i < blogPageBestArticles.Count; i++)
+                                {
+                                    <div class="d-flex @(i < blogPageBestArticles.Count - 1 ? "mb-3" : string.Empty)">
+                                        <div class="flex-shrink-0 me-3" style="width: 70px; height: 70px;">
+                                            @{
+                                                var image = blogPageBestArticles[i].CoverImage;
+                                                if (image is not null)
+                                                {
+                                                    var altText = image.Value<string>("altText");
+                                                    if (string.IsNullOrWhiteSpace(altText))
+                                                    {
+                                                        altText = image.Name;
+                                                    }
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@image?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@altText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@blogPageBestArticles[i].Url()">
+                                                        <img loading="lazy" src="@defaultCover?.GetCropUrl(imageCropMode: ImageCropMode.Crop, width: 70, height: 70)" alt="@defaultCoverAltText" class="w-100 h-100 object-fit-cover">
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                        <div>
+                                            <span class="contrast-support"> @blogPageBestArticles[i]?.PostDate.ToString(dateFormat) </span>
+                                            <h3 class="h6 contrast-support"><a href="@blogPageBestArticles[i].Url()" class="hover-underline" style="color:inherit;">@blogPageBestArticles[i].Name</a></h3>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        break;
+}
+</div>

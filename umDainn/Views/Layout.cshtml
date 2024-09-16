@@ -1,0 +1,76 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration _configuration
+@{
+    Layout = null;
+    bool isMultisiteSetup = _configuration.GetValue<bool>("IsMultisiteSetup");
+    Design? design;
+    if (ViewData["Design"] is null)
+    {
+        design = Umbraco.AssignedContentItem.AncestorsOrSelf<BlockGrid>()
+            .OrderByDescending(x => x.Level)
+            .FirstOrDefault(x => x.OverrideDesign != null)?.OverrideDesign as Design
+            ?? (isMultisiteSetup
+                ? Umbraco.AssignedContentItem.Root().Descendant<DesignFolder>()?.SelectedDesign
+                : (Umbraco.ContentAtRoot()
+                    .FirstOrDefault(x => x.ContentType.Alias.InvariantEquals("designFolder")) as DesignFolder)?.SelectedDesign) as Design;
+
+        ViewData["Design"] = design;
+    }
+    else
+    {
+        design = ViewData["Design"] as Design;
+    }
+    var settings = isMultisiteSetup
+        ? Umbraco.AssignedContentItem.Root().Descendant<Settings>()
+        : Umbraco.ContentAtRoot().FirstOrDefault(x => x.ContentType.Alias.InvariantEquals("settings")) as Settings;
+    ViewData["Settings"] = settings;
+    var seoTitle = Umbraco.AssignedContentItem.Value<string>("title");
+    var description = Umbraco.AssignedContentItem.Value<string>("description");
+    var seoCanonical = Umbraco.AssignedContentItem.Value<string>("overrideCanonicalURL");
+    var title = !string.IsNullOrWhiteSpace(seoTitle)
+    ? seoTitle
+    : $"{Umbraco.AssignedContentItem.Name}{(!string.IsNullOrWhiteSpace(settings?.WebsiteName) ? $" — {settings.WebsiteName}" : string.Empty)}";
+    var canonical = !string.IsNullOrWhiteSpace(seoCanonical)
+    ? seoCanonical
+    : Umbraco.AssignedContentItem.Url(null, UrlMode.Absolute);
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @Html.Raw(settings?.AfterOpeningHeadScripts)
+    <title>@Html.Raw(title)</title>
+    @await Html.CachedPartialAsync("favicons", settings?.Favicon!, TimeSpan.FromHours(1), true, false)
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (!string.IsNullOrWhiteSpace(description))
+    {
+            <meta name="description" content="@description">
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@Html.Raw(title)" />
+    <meta property="og:site_name" content="@settings?.WebsiteName" />
+    <meta property="og:url" content="@canonical" />
+    @if (settings?.DefaultSocialShareImage is not null)
+    {
+            <meta property="og:image" content="@settings?.DefaultSocialShareImage?.Url(null, UrlMode.Absolute)" />
+    }
+    <link rel="canonical" href="@canonical" />
+    <link rel="stylesheet" href="@Url.Content("~/css/index.min.css")" />
+    @await Html.PartialAsync("blockgrid/design", design)
+    @Html.Raw(settings?.BeforeClosingHeadScripts)
+</head>
+
+<body class="d-flex flex-column">
+    @Html.Raw(settings?.AfterOpeningBodyScripts)
+    @await Html.PartialAsync("header")
+    <main class="flex-grow-1">@RenderBody()</main>
+    @await Html.PartialAsync("footer")
+    <script src="layout-js-bundle"></script>
+    
+    @Html.Raw(settings?.BeforeClosingBodyScripts)
+</body>
+
+</html>

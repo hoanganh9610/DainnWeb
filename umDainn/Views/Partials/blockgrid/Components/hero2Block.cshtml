@@ -1,0 +1,34 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<Hero2Block>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var image = Model.Content.Image;
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+    var imagePositioning = Model.Content.ImagePositioning;
+    var headlineAlignment = Model.Content.HeadlineAlignment;
+}
+<div class="section-hero-2  d-flex @(imagePositioning == "Below the title" ? "direction-vertical" : "direction-horizontal")" style="background-color:#@backgroundColor" @(hasBrightContrast ? "bright-contrast" : null)>
+    <div class="container">
+        <div class="hero-content">
+            <h1 style="text-align: @(headlineAlignment == "Right" ? "end" : headlineAlignment == "Center" ? "center" : "start")" class="h1 mb-2">
+                @Model.Content.Headline
+            </h1>
+            @* Only render if there is some content... *@
+            @if (Model.Areas.Any(a => a.Any()))
+            {
+                @await Html.GetBlockGridItemAreasHtmlAsync(Model)
+            }
+        </div>
+        @if (image is not null)
+        {
+            <div class="hero-background" style="background-image: url(@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: 1920))">
+            </div>
+        }
+    </div>
+</div>

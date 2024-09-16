@@ -1,0 +1,19 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+<div ng-controller="callToActionBlockController" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div class="input-group-with-btn mb-1">
+        <input type="email" class="form-control pe-none" placeholder="Enter your email" aria-label="Enter your email">
+        <button class="btn btn-primary btn-icon btn-icon-sm" type="button">
+            <span class="js-submit-init">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                    <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+                </svg>
+            </span>
+        </button>
+    </div>
+</div>

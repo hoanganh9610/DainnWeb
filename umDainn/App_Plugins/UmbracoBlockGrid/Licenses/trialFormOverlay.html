@@ -1,0 +1,15 @@
+<div ng-controller="trialFormOverlayController as vm">
+    <p class="mb4">
+        We are glad you joined us.<br />
+        Please provide us some information about yourself to continue working.
+    </p>
+    <uui-form class="w-100">
+        <form class="license-form">
+            <uui-form-layout-item class="w-60 mx-auto">
+                <uui-input class="w-100" id="email" type="email" name="email" placeholder="Email *" label="email" 
+                           ng-on-change="vm.onChange($event)"
+                           required="" required-message="You must enter a Email" />
+            </uui-form-layout-item>
+        </form>
+    </uui-form>
+</div>

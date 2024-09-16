@@ -1,0 +1,83 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ClientReview3Block>>
+@{
+	var uniqueId = "carousel-" + Model?.Content?.Key.ToString() ?? Guid.NewGuid().ToString();
+	var design = ViewData["Design"] as Design;
+	var backgroundColor = string.Empty;
+	if (!string.IsNullOrEmpty(Model?.Content?.BackgroundColor)
+	&& (design?.BaselineColors?.Background.TryGetValue(Model?.Content?.BackgroundColor!, out var value) ?? false))
+	{
+		backgroundColor = value;
+	}
+	var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+	var hasBrightContrast = Model?.Content?.Contrast == "ffffff";
+}
+<div class="section-review-3 position-relative py-8 py-md-10 bg-light-light overflow-hidden" style="background-color: #@(backgroundColor)" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "") data-bs-theme="light">
+	<div class="container">
+		<div class="row align-items-center mb-4">
+			<div class="col-12 col-md-6 mb-4 mb-md-8 mb-md-0 text-center text-md-start">
+				<h2 class="h2">@Model?.Content?.Title</h2>
+				<p class="lead-lg">@Model?.Content?.Subtitle</p>
+			</div>
+			<div class="col-12 col-md-6 mb-4 mb-md-0">
+				<div class="d-flex align-items-center justify-content-center justify-content-md-end swiper-navigations">
+					<button class="me-2 border d-inline-flex align-items-center justify-content-center p-0 rounded-pill swiper-button-prev" style="width: 58px; height: 58px; background: transparent;color:inherit;">
+						<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-1-2">
+							<path d="M10.7051 7.12817L4.15732 13.6759L10.7051 20.2237" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path d="M22.4941 13.6759H4.33949" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+					<button class="border d-inline-flex align-items-center justify-content-center p-0 rounded-pill swiper-button-next" style="width: 58px; height: 58px; background: transparent;color:inherit;">
+						<svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" data-config-id="auto-svg-2-2">
+							<path d="M16.2949 7.12817L22.8427 13.6759L16.2949 20.2237" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+							<path d="M4.50586 13.6759H22.6605" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="swiper swiper-reviews-3">
+			<div class="swiper-wrapper mb-7">
+				@{
+					var reviews = Model?.Content?.ClientReviews?.Select(x => x.Content).OfType<ClientReview3Item>().ToList() ?? new List<ClientReview3Item>();
+					for (int j = 0; j < reviews.Count; j++)
+					{
+						var review = reviews[j];
+						if (review != null)
+						{
+							var image = review.Image;
+							<div class="swiper-slide mw-lg mw-lg-6xl h-auto">
+								<div class="flex-shrink-0 me-6 d-inline-block w-100 h-100">
+									<div class="rounded-5 overflow-hidden h-100" @(review.Contrast == "ffffff" ? "card-contrast" : "") style="@(string.IsNullOrEmpty(review.BackgroundColor) || (!design?.BaselineColors?.Background.ContainsKey(review.BackgroundColor) ?? false) ? string.Empty : "background-color: #" + design?.BaselineColors?.Background[review.BackgroundColor])">
+										<div class="row flex-column flex-lg-row mx-0 h-100">
+											<div class="col-12 col-lg-4 p-0">
+												@if (image is not null)
+												{
+													var altText = image.Value<string>("altText");
+													if (string.IsNullOrWhiteSpace(altText))
+													{
+														altText = image.Name;
+													}
+													<img class="img-fluid d-block h-lg-100 w-100 rounded-5" style="object-fit: cover;" src="@image.Url()" alt="@altText" alt="...">
+												}
+											</div>
+											<div class="col-12 col-lg-8 p-0 align-self-md-center flex-grow-1 d-flex flex-column">
+												<div class="py-6 py-lg-12 px-6 px-md-8 w-100 mx-auto flex-grow-1 d-flex flex-column">
+													<div class="mb-8 text-holder">
+														@review.Review
+													</div>
+													<span class="d-block fw-medium lead-sm mt-auto mt-lg-0">@review.ClientName</span>
+													<span class="d-block lead-sm">@review.Position</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+					}
+				}
+			</div>
+		</div>
+	</div>
+	</section>

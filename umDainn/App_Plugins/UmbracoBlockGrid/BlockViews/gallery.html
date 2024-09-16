@@ -1,0 +1,44 @@
+<section class="section-gallery" ng-controller="layoutSectionsController" ng-click="block.edit()" ng-focus="block.focus" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}">
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" ng-style="{
+                    'background-image': 'url('+(block.data.images[0].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=456&height=456)'
+                }">
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" ng-style="{
+                    'background-image': 'url('+(block.data.images[1].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=456&height=456)'
+                }">
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-4">
+                <div class="gallery-item" ng-style="{
+                    'background-image': 'url('+(block.data.images[2].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=456&height=456)'
+                }">
+                </div>
+            </div>
+            <div class="col-md-6 mb-2 mb-md-0">
+                <div class="gallery-item" ng-style="{
+                    'background-image': 'url('+(block.data.images[3].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=688&height=456)'
+                }">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="gallery-item" ng-style="{
+                    'background-image': 'url('+(block.data.images[4].mediaKey | mediaItemResolver).mediaLink+'?rmode=min&width=688&height=456)'
+                }">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

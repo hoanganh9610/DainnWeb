@@ -1,0 +1,106 @@
+﻿@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<CardBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<style>
+    .base-card .card-text p:last-child {
+        margin-bottom: 0;
+    }
+
+    .base-card[bright-contrast] {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h1 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h2 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h3 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h4 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h5 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] h6 {
+        color: white;
+    }
+
+    .base-card[bright-contrast] div p {
+        color: white;
+    }
+</style>
+@if (Model.ColumnSpan >= 6)
+{
+    <div class="base-card card h-md-100" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+        @{
+            var image = Model.Content.Image;
+            if (image is not null)
+            {
+                var altText = image.Value<string>("altText");
+                if (string.IsNullOrWhiteSpace(altText))
+                {
+                    altText = image.Name;
+                }
+                <div class="p-0 card-img-overlay">
+                    <img class="card-img h-100 object-fit-cover" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: Model.ColumnSpan >= 6 ? 900 : 350)" alt="@altText" />
+                </div>
+            }
+        }
+        <div class="position-relative p-4 h-100 d-flex flex-column align-items-start justify-content-end" style="min-height: 251px;">
+            <h4 class="h4 text-center">@Model.Content.Headline</h4>
+            <div class="card-text mb-3">
+                @Model.Content.RichText
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Name))
+            {
+                <a class="btn @(Model.Content.ButtonVariant == "Secondary" ? "btn-outline-primary" : "btn-primary")" href="@Model.Content.Link.Url" target="@Model.Content.Link.Target">@Model.Content.Link.Name</a>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="base-card card h-md-100 @(Model.ColumnSpan >= 6 ? "--medium" : null)" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+        <div class="card-media" style="height: 250px;">
+            @{
+                var image = Model.Content.Image;
+                if (image is not null)
+                {
+                    var altText = image.Value<string>("altText");
+                    if (string.IsNullOrWhiteSpace(altText))
+                    {
+                        altText = image.Name;
+                    }
+                    <img class="card-img-top h-100 object-fit-cover" src="@image.GetCropUrl(imageCropMode: ImageCropMode.Min, width: Model.ColumnSpan >= 6 ? 900 : 350)" alt="@altText" />
+                }
+            }
+        </div>
+        <div class="card-body">
+            <h4 class="h4 text-center">@Model.Content.Headline</h4>
+            <p class="card-text">@Model.Content.RichText</p>
+            @if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Name))
+            {
+                <a class="btn @(Model.Content.ButtonVariant == "Secondary" ? "btn-outline-primary" : "btn-primary")" href="@Model.Content.Link.Url" target="@Model.Content.Link.Target">@Model.Content.Link.Name</a>
+            }
+        </div>
+    </div>
+}

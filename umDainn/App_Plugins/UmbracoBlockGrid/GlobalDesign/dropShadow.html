@@ -1,0 +1,133 @@
+﻿<div ng-controller="dropShadowController" class="fonts-property-editor effects-block">
+    <div class="accordion" id="dropShadow-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#dropShadowPicturesAndVideo">
+                    <span>Pictures & Video</span>
+                </a>
+            </div>
+            <div id="dropShadowPicturesAndVideo" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span3">
+                                <div class="colour-item">
+                                    <label ng-click="showColorPicker($event)" class="control-label">Color</label><br />
+                                    <umb-color-picker ng-model="model.value.picturesAndVideo.color" on-change="onChange(color, 'picturesAndVideo', 'color')" on-move="onChange(color, 'picturesAndVideo', 'color')" on-hide="onChange(color, 'picturesAndVideo', 'color')" options="options"></umb-color-picker>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="picturesAndVideoShadowOpacity" class="control-label">Opacity</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="picturesAndVideoShadowOpacity" type="number" min="0" max="100" name="100" ng-model="model.value.picturesAndVideo.opacity" />
+                                        <span class="add-on">%</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="picturesAndVideoShadowOffsetX" class="control-label">Offset-x</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="picturesAndVideoShadowOffsetX" type="number" min="0" name="" ng-model="model.value.picturesAndVideo.offsetX" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="picturesAndVideoShadowOffsetY" class="control-label">Offset-y</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="picturesAndVideoShadowOffsetY" type="number" min="0" name="" ng-model="model.value.picturesAndVideo.offsetY" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="picturesAndVideoShadowBlurRadius" class="control-label">Blur-radius</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="picturesAndVideoShadowBlurRadius" type="number" min="0" name="" ng-model="model.value.picturesAndVideo.blurRadius" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span9" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background: #ffffff;">
+                                        <div class="imgs-holder">
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-img.jpg" ng-style="{'box-shadow': model.value.picturesAndVideo.offsetX + 'px ' + model.value.picturesAndVideo.offsetY + 'px ' + model.value.picturesAndVideo.blurRadius + 'px rgba(' + toRgbString(model.value.picturesAndVideo.color) + ',' + model.value.picturesAndVideo.opacity + '%)'}" />
+                                            </div>
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-video.jpg" ng-style="{'box-shadow': model.value.picturesAndVideo.offsetX + 'px ' + model.value.picturesAndVideo.offsetY + 'px ' + model.value.picturesAndVideo.blurRadius + 'px rgba(' + toRgbString(model.value.picturesAndVideo.color) + ',' + model.value.picturesAndVideo.opacity + '%)'}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#dropShadowCards">
+                    <span>Cards</span>
+                </a>
+            </div>
+            <div id="dropShadowCards" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span3">
+                                <div class="colour-item">
+                                    <label ng-click="showColorPicker($event)" class="control-label">Color</label><br />
+                                    <umb-color-picker ng-model="model.value.cards.color" on-change="onChange(color, 'cards', 'color')" on-move="onChange(color, 'cards', 'color')" on-hide="onChange(color, 'cards', 'color')" options="options"></umb-color-picker>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="cardsShadowOpacity" class="control-label">Opacity</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="cardsShadowOpacity" type="number" min="0" name="100" ng-model="model.value.cards.opacity" />
+                                        <span class="add-on">%</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="cardsShadowOffsetX" class="control-label">Offset-x</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="cardsShadowOffsetX" type="number" min="0" name="" ng-model="model.value.cards.offsetX" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="cardsShadowOffsetY" class="control-label">Offset-y</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="cardsShadowOffsetY" type="number" min="0" name="" ng-model="model.value.cards.offsetY" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                                <div class="colour-item">
+                                    <label for="cardsShadowBlurRadius" class="control-label">Blur-radius</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="cardsShadowBlurRadius" type="number" min="0" name="" ng-model="model.value.cards.blurRadius" />
+                                        <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span9" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background: #ffffff;">
+                                        <div class="imgs-holder">
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-card-1.jpg" ng-style="{'box-shadow': model.value.cards.offsetX + 'px ' + model.value.cards.offsetY + 'px ' + model.value.cards.blurRadius + 'px rgba(' + toRgbString(model.value.cards.color) + ',' + model.value.cards.opacity + '%)'}" />
+                                            </div>
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-card-2.jpg" ng-style="{'box-shadow': model.value.cards.offsetX + 'px ' + model.value.cards.offsetY + 'px ' + model.value.cards.blurRadius + 'px rgba(' + toRgbString(model.value.cards.color) + ',' + model.value.cards.opacity + '%)'}" />
+                                            </div>
+                                            <div class="img-holder">
+                                                <img ng-src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/preview-card-3.jpg" ng-style="{'box-shadow': model.value.cards.offsetX + 'px ' + model.value.cards.offsetY + 'px ' + model.value.cards.blurRadius + 'px rgba(' + toRgbString(model.value.cards.color) + ',' + model.value.cards.opacity + '%)'}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

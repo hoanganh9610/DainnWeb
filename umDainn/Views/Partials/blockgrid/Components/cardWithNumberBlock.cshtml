@@ -1,0 +1,34 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<CardWithNumberBlock>>
+@{
+    var design = ViewData["Design"] as Design;
+    string GetBackgroundColor(Dictionary<string, string> colors, string key)
+    {
+        return !string.IsNullOrEmpty(key) && (colors?.TryGetValue(key, out var value) ?? false) ? value : string.Empty;
+    }
+    var backgroundColor = GetBackgroundColor(design?.BaselineColors?.Background ?? new(), Model.Content.BackgroundColor ?? string.Empty);
+    var dividerColor = GetBackgroundColor(design?.BaselineColors?.Background ?? new(), Model.Content.DividerColor ?? string.Empty);
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<div class="card-number h-100 @(noBackgroundColor ? "nobackgroundcolor" : "p-5")" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    @{
+        var image = Model.Content.Image;
+        if (image is not null)
+        {
+            var altText = image.Value<string>("altText");
+            if (string.IsNullOrWhiteSpace(altText))
+            {
+                altText = image.Name;
+            }
+            <div class="mb-3">
+                <img class="@(image.Value<string>("umbracoExtension") == "svg" ? "" : string.Empty)" src="@image.GetCropUrl(width: 32)" alt="@altText">
+            </div>
+        }
+    }
+    <h3 class="h2 mb-3">@Model.Content.Headline</h3>
+    <hr class="mt-0 mb-3" style="border-color: #@dividerColor" />
+    <p class="mb-3 fw-medium">@Model.Content.Subtitle</p>
+    <div class="text-holder lead-sm">
+        @Model.Content.RichText
+    </div>
+</div>

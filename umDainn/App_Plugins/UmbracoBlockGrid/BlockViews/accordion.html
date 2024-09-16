@@ -1,0 +1,19 @@
+<div class="accordion" id="accordionBlock" ng-class="{'with-bg':  block.data.backgroundColor != null}" ng-controller="accordionBlockController" ng-focus="block.focus" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" data-bs-theme="light">
+    <style ng-bind="styles"></style>
+    <div class="accordion-item" ng-repeat="item in block.data.items.contentData">
+        <p class="accordion-header position-relative">
+            <span class="accordion-button shadow-none" ng-class="{'collapsed': getCurrentIndex(block.data.udi) === null ? $index !== 0 : $index != getCurrentIndex(block.data.udi)}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $index }}" aria-expanded="{{ getCurrentIndex(block.data.udi) === null ? $index === 0 : $index == getCurrentIndex(block.data.udi) }}" aria-controls="collapse-{{ $index }}" ng-click="toggleCurrentCollapse($event, block.data.udi, $index)">
+                <span class="accordion-counter">{{ $index + 1 < 10 ? '0' + ($index + 1) : $index + 1 }}</span>
+                        {{item.headline}}
+                        <span class="accordion-arrow">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" fill="currentColor" />
+                            </svg>
+                        </span>
+                </span>
+        </p>
+        <div id="collapse-{{ $index }}" class="accordion-collapse collapse" ng-class="{'show': getCurrentIndex(block.data.udi) === null ? $index === 0 : $index == getCurrentIndex(block.data.udi)}" aria-labelledby="heading-{{ $index }}" data-bs-parent="#accordionBlock">
+            <div class="accordion-body lead-sm" ng-bind-html="item.richText.markup | safe_html"></div>
+        </div>
+    </div>
+</div>

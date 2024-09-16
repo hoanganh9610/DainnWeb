@@ -1,0 +1,15 @@
+<style>
+    :host {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .embed-code iframe {
+        width: 100%;
+    }
+</style>
+<div ng-controller="embedCodeController">
+    <style ng-bind="styles"></style>
+    <div ng-bind-html="block.data.code | safe_html" data-bs-theme="light" class="embed-code" ng-click="block.edit()" ng-focus="block.focus" style="--my-text-columns: {{block.layout.columnSpan === 12 ? 2 : 1}}">
+    </div>
+</div>

@@ -1,0 +1,99 @@
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	line-height: normal;
+	margin: 0 0 15px;
+}
+h1, .h1 {
+	font-size: 2.25rem;
+	font-weight: 700;
+}
+h2, .h2 {
+	font-size: 2rem;
+	font-weight: 300;
+}
+h3, .h3 {
+	font-size: 1.25rem;
+	font-weight: 500;
+}
+h4, .h4 {
+	font-size: 1.125rem;
+	font-weight: 500;
+	letter-spacing: 1px;
+}
+h5, .h5 {
+	font-size: 1rem;
+	color: #333333;
+	font-weight: 500;
+	letter-spacing: 1px;
+}
+h6, .h6 {
+	font-size: .875rem;
+	font-weight: 500;
+	letter-spacing: 1px;
+}
+p {
+	font-size: 1rem;
+}
+hr {
+	margin-top: 1.5rem;
+	border: none;
+	border-top: 1px solid #f3f3f3;
+}
+a {
+	color: #3544b1;
+	text-decoration: none;
+}
+a:hover { color: #666666; }
+p { font-size:1rem; }
+
+/**umb_name:H1*/
+h1 {
+	font-weight: 700;
+	font-size: 54px;
+}
+
+/**umb_name:H2*/
+h2 {
+	font-weight: 700;
+	font-size: 46px;
+}
+
+/**umb_name:H3*/
+h3 {
+	font-weight: 500;
+	font-size: 32px;
+}
+
+/**umb_name:H4*/
+h4 {
+	font-weight: 500;
+	font-size: 26px;
+}
+
+/**umb_name:H5*/
+h5 {
+	font-weight: 500;
+	font-size: 22px;
+}
+
+/**umb_name:H6*/
+h6 {
+	font-weight: 500;
+	font-size: 18px;
+}
+
+/**umb_name:Text large*/
+p.lead-lg {
+	font-size: 20px;
+	line-height: 30px;
+}
+
+/**umb_name:Text medium*/
+p {
+}
+
+/**umb_name:Text small*/
+p.lead-sm {
+	font-size: 14px;
+	line-height: 24px;
+}

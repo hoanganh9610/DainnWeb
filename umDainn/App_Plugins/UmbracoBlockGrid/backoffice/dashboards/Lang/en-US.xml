@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="dashboardTabs">
+    <key alias="ByteAnt.ContentDashboard">ByteEditor</key>
+  </area>
+  <area alias="ByteAnt.ContentDashboard">
+    <key alias="heading">Welcome,</key>
+    <key alias="bodytext">This is the Backoffice. From here, you can modify the content, media, and settings of your website.</key>
+    <key alias="copyright">© Sample Company 20XX</key>
+  </area>
+</language>

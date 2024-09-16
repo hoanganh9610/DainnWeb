@@ -1,0 +1,13 @@
+<div class="swiper-slide border p-5" ng-repeat="review in block.data.clientReviews.contentData">
+	<div class="d-flex mb-3">
+		<div class="img-holder me-3">
+			{{mediaItem = (review.image[0].mediaKey | mediaItemResolver); ""}}
+			<img class="image w-100 h-100 object-fit-cover" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?height=96">
+		</div>
+		<div>
+			<p class="lead-sm fw-medium mb-1">{{review.clientName}}</p>
+			<p class="lead-sm mb-0">{{review.position}}</p>
+		</div>
+	</div>
+	<div class="text-holder" ng-bind-html="review.review.markup | safe_html"></div>
+</div>

@@ -1,0 +1,65 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<PricingCardBlock>>
+@using Umbraco.Cms.Core.Models
+@{
+    var design = ViewData["Design"] as Design;
+    var backgroundColor = string.Empty;
+    if (!string.IsNullOrEmpty(Model.Content.BackgroundColor)
+    && (design?.BaselineColors?.Background.TryGetValue(Model.Content.BackgroundColor, out var value) ?? false))
+    {
+        backgroundColor = value;
+    }
+    var noBackgroundColor = string.IsNullOrEmpty(backgroundColor);
+    var hasBrightContrast = Model.Content.Contrast == "ffffff";
+}
+<div class="card-pricing h-100" data-bs-theme="light" style="background-color: #@backgroundColor" @(noBackgroundColor ? "nobackgroundcolor" : null) @(hasBrightContrast ? "bright-contrast" : "")>
+    @if (Model.Content.MakePrimary)
+    {
+        <span class="badge fw-medium text-bg-primary">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_12855_12231)">
+                    <path d="M6.70183 5.46622C6.79808 5.17747 7.20583 5.17747 7.30208 5.46622L7.86646 7.16109C7.99068 7.53367 8.19998 7.87219 8.47777 8.14982C8.75555 8.42746 9.09419 8.63657 9.46683 8.76059L11.1608 9.32497C11.4496 9.42122 11.4496 9.82897 11.1608 9.92522L9.46595 10.4896C9.09338 10.6138 8.75486 10.8231 8.47722 11.1009C8.19959 11.3787 7.99048 11.7173 7.86646 12.09L7.30208 13.784C7.28133 13.8472 7.24114 13.9023 7.18724 13.9413C7.13335 13.9803 7.0685 14.0013 7.00196 14.0013C6.93541 14.0013 6.87056 13.9803 6.81667 13.9413C6.76277 13.9023 6.72258 13.8472 6.70183 13.784L6.13746 12.0891C6.01332 11.7166 5.80415 11.3782 5.52652 11.1005C5.2489 10.8229 4.91044 10.6137 4.53796 10.4896L2.84308 9.92522C2.77985 9.90447 2.72479 9.86428 2.68576 9.81038C2.64672 9.75649 2.6257 9.69164 2.6257 9.62509C2.6257 9.55855 2.64672 9.4937 2.68576 9.43981C2.72479 9.38591 2.77985 9.34572 2.84308 9.32497L4.53796 8.76059C4.91044 8.63646 5.2489 8.42729 5.52652 8.14966C5.80415 7.87204 6.01332 7.53358 6.13746 7.16109L6.70183 5.46622ZM3.32171 1.00459C3.33425 0.966701 3.35842 0.933727 3.39078 0.910355C3.42314 0.886984 3.46204 0.874405 3.50196 0.874405C3.54187 0.874405 3.58077 0.886984 3.61313 0.910355C3.64549 0.933727 3.66966 0.966701 3.6822 1.00459L4.02083 2.02134C4.1722 2.47459 4.52746 2.82984 4.98071 2.98122L5.99746 3.31984C6.03535 3.33239 6.06832 3.35656 6.09169 3.38892C6.11506 3.42128 6.12764 3.46018 6.12764 3.50009C6.12764 3.54001 6.11506 3.57891 6.09169 3.61127C6.06832 3.64363 6.03535 3.6678 5.99746 3.68034L4.98071 4.01897C4.75716 4.09345 4.55404 4.21896 4.38743 4.38557C4.22082 4.55218 4.09531 4.7553 4.02083 4.97884L3.6822 5.99559C3.66966 6.03349 3.64549 6.06646 3.61313 6.08983C3.58077 6.1132 3.54187 6.12578 3.50196 6.12578C3.46204 6.12578 3.42314 6.1132 3.39078 6.08983C3.35842 6.06646 3.33425 6.03349 3.32171 5.99559L2.98308 4.97884C2.9086 4.7553 2.78309 4.55218 2.61648 4.38557C2.44987 4.21896 2.24675 4.09345 2.02321 4.01897L1.00646 3.68034C0.968563 3.6678 0.935588 3.64363 0.912217 3.61127C0.888846 3.57891 0.876266 3.54001 0.876266 3.50009C0.876266 3.46018 0.888846 3.42128 0.912217 3.38892C0.935588 3.35656 0.968563 3.33239 1.00646 3.31984L2.02321 2.98122C2.24675 2.90674 2.44987 2.78123 2.61648 2.61462C2.78309 2.44801 2.9086 2.24488 2.98308 2.02134L3.32171 1.00459ZM9.50708 0.0867186C9.51572 0.0618041 9.5319 0.0402 9.55339 0.02491C9.57487 0.00961998 9.60059 0.00140381 9.62696 0.00140381C9.65332 0.00140381 9.67904 0.00961998 9.70052 0.02491C9.72201 0.0402 9.73819 0.0618041 9.74683 0.0867186L9.97258 0.763969C10.0732 1.06672 10.3103 1.30384 10.6131 1.40447L11.2903 1.63022C11.3152 1.63886 11.3368 1.65504 11.3521 1.67653C11.3674 1.69801 11.3756 1.72372 11.3756 1.75009C11.3756 1.77646 11.3674 1.80218 11.3521 1.82366C11.3368 1.84514 11.3152 1.86133 11.2903 1.86997L10.6131 2.09572C10.4639 2.14535 10.3283 2.22908 10.2171 2.34027C10.1059 2.45145 10.0222 2.58702 9.97258 2.73622L9.74683 3.41347C9.73819 3.43838 9.72201 3.45999 9.70052 3.47528C9.67904 3.49057 9.65332 3.49878 9.62696 3.49878C9.60059 3.49878 9.57487 3.49057 9.55339 3.47528C9.5319 3.45999 9.51572 3.43838 9.50708 3.41347L9.28133 2.73622C9.2317 2.58702 9.14797 2.45145 9.03678 2.34027C8.9256 2.22908 8.79003 2.14535 8.64083 2.09572L7.96446 1.86997C7.93954 1.86133 7.91794 1.84514 7.90265 1.82366C7.88736 1.80218 7.87914 1.77646 7.87914 1.75009C7.87914 1.72372 7.88736 1.69801 7.90265 1.67653C7.91794 1.65504 7.93954 1.63886 7.96446 1.63022L8.6417 1.40447C8.94445 1.30384 9.18158 1.06672 9.2822 0.763969L9.50708 0.0875936V0.0867186Z" fill="#F2F2F2" style="fill:#F2F2F2;fill:color(display-p3 0.9490 0.9490 0.9490);fill-opacity:1;" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_12855_12231">
+                        <rect width="14" height="14" fill="white" style="fill:white;fill-opacity:1;" />
+                    </clipPath>
+                </defs>
+            </svg>
+            Most popular
+        </span>
+    }
+    <h3 class="h5 mb-0">
+        @Model.Content.Headline
+    </h3>
+    <p class="mb-4 lead-sm">@Model.Content.Description</p>
+    <p class="mb-4"><span class="h3">@Model.Content.Price</span><span class="price-small-txt lead-lg">@Model.Content.Duration</span></p>
+    @if (!string.IsNullOrWhiteSpace(Model?.Content?.Link?.Name))
+    {
+        <a class="btn w-100 mb-4 @(Model.Content.MakePrimary ? "btn-primary" : "btn-outline-primary" )" href="@Model.Content.Link.Url" target="@Model.Content.Link.Target">@Model.Content.Link.Name</a>
+    }
+    <ul class="list-unstyled mb-0">
+        @{
+            var items = Model?.Content?.ProsAndCons?.Select(x => x.Content).OfType<ProsAndConsItem>() ?? Enumerable.Empty<ProsAndConsItem>();
+            foreach (var item in items)
+            {
+                <li class="d-flex align-items-center">
+                    @{
+                        var image = item.Icon;
+                        if (image is not null)
+                        {
+                            var altText = image.Value<string>("altText");
+                            if (string.IsNullOrWhiteSpace(altText))
+                            {
+                                altText = image.Name;
+                            }
+                            <div class="icon-holder me-2">
+                                <img ng-if="icon !== null" src="@image.Url()" alt="@image.Name">
+                            </div>
+                        }
+                    }
+                    <p class="mb-0">@item.Text</p>
+                </li>
+            }
+        }
+    </ul>
+</div>

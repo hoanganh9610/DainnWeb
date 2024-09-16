@@ -1,0 +1,64 @@
+<style>
+    .carousel-block .carousel-item {
+        height: 60vh;
+    }
+
+    @media(max-width:575px) {
+        .carousel-block .carousel-item {
+            height: 270px;
+        }
+    }
+
+    .carousel img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .carousel-block .carousel-control-next:focus,
+    .carousel-block .carousel-control-prev:focus {
+        opacity: .5;
+    }
+
+    .carousel-block .carousel-control-next:hover,
+    .carousel-block .carousel-control-prev:hover {
+        opacity: 1;
+    }
+
+    .carousel-block .carousel-control-next-icon,
+    .carousel-block .carousel-control-prev-icon {
+        background: none;
+    }
+
+    @media(min-width:768px) {
+
+        .carousel-block .carousel-control-next-icon svg,
+        .carousel-block .carousel-control-prev-icon svg {
+            width: 25px;
+            height: 35px;
+        }
+    }
+</style>
+<div id="carouselBlock" class="carousel-block carousel slide" ng-controller="carouselBlockController" ng-focus="block.focus" data-bs-theme="light">
+    <div class="carousel-inner">
+        <div class="carousel-item" ng-class="{'active': $first}" ng-repeat="image in block.data.images">
+            {{mediaItem = (image.mediaKey | mediaItemResolver); ""}}
+            <img class="d-block w-100" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=1300" alt="{{mediaItem.name}}">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlock" data-bs-slide="prev" ng-click="changeSlide('prev', $event)">
+        <span class="carousel-control-prev-icon" aria-hidden="true">
+            <svg width="15" height="25" viewBox="0 0 15 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5862 0.96552C13.0149 0.365624 12.0654 0.342467 11.4655 0.913796L0.965514 10.9138C0.672842 11.1925 0.505036 11.5776 0.500109 11.9817C0.495181 12.3858 0.653548 12.7749 0.939337 13.0607L11.4393 23.5607C12.0251 24.1464 12.9749 24.1464 13.5607 23.5607C14.1464 22.9749 14.1464 22.0251 13.5607 21.4393L4.1475 12.0262L13.5345 3.08621C14.1344 2.51488 14.1575 1.56542 13.5862 0.96552Z" fill="white" stroke="black" stroke-width="0.5"></path>
+            </svg>
+        </span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselBlock" data-bs-slide="next" ng-click="changeSlide('next', $event)">
+        <span class="carousel-control-next-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="25" viewBox="0 0 15 25" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.913796 0.96552C1.48512 0.365624 2.43459 0.342467 3.03449 0.913796L13.5345 10.9138C13.8272 11.1925 13.995 11.5776 13.9999 11.9817C14.0048 12.3858 13.8465 12.7749 13.5607 13.0607L3.06066 23.5607C2.47488 24.1464 1.52513 24.1464 0.939343 23.5607C0.353556 22.9749 0.353556 22.0251 0.939343 21.4393L10.3525 12.0262L0.96552 3.08621C0.365624 2.51488 0.342467 1.56542 0.913796 0.96552Z" fill="white" stroke="black" stroke-width="0.5" />
+            </svg>
+        </span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>

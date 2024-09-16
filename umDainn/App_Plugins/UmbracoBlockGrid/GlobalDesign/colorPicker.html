@@ -1,0 +1,17 @@
+<div ng-controller="colorPickerController as vm">
+    <div style="display: flex; column-gap: 10px;">
+        <ng-form name="vm.modelValueForm">
+            <div>
+                <div ng-if="!isObjectNotEmpty(model.items)">
+                    You haven't defined any colors
+                </div>
+                <umb-color-swatches colors="model.items"
+                                    selected-color="vm.selectedBackground"
+                                    on-select="vm.selectColor(color)"
+                                    size="m">
+                </umb-color-swatches>
+            </div>
+            <input type="hidden" name="selectedColor" ng-model="model.selectedColor" val-property-validator="validateMandatory" />
+        </ng-form>
+    </div>
+</div>

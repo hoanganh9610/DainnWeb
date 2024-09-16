@@ -1,0 +1,48 @@
+<style>
+    .service-title {
+        text-transform: uppercase;
+    }
+
+    .card[bright-contrast] {
+        color: white;
+        --has-bright-contrast: white;
+    }
+
+    .card-service img {
+        height: 100%;
+    }
+
+    @media(max-width:575px) {
+        .card-service img {
+            height: 270px !important;
+        }
+    }
+
+    .card-service[bright-contrast] div p,
+    .card-service[bright-contrast] .h4 {
+        color: white;
+    }
+</style>
+<div ng-controller="serviceBlockController">
+    <style ng-bind="styles"></style>
+    <div class="card-service card overflow-x-hidden overflow-y-hidden h-100" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-click="block.edit()" ng-focus="block.focus" data-bs-theme="light">
+        <div class="row gx-0 h-100">
+            {{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+            <div class="col-md-5">
+                <img class="image w-100 h-100 object-fit-cover" draggable="false" ng-if="mediaItem !== null" ng-src="{{mediaItem.mediaLink}}?rmode=min&width=550">
+            </div>
+            <div class="col-md-7 d-flex flex-column justify-content-between" ng-class="block.layout.columnSpan == 12 ? 'p-4' : (block.layout.columnSpan < 6 ? 'p-2' : 'p-3')">
+                <div>
+                    <p class="mb-2" ng-bind-html="block.data.description"></p>
+                    <h3 class="h4">{{block.data.headline}}</h3>
+                </div>
+                <div class="mt-auto">
+                    <a class="btn" ng-class="{
+                        'btn-primary': block.data.buttonVariant === 'Primary' || block.data.buttonVariant === '' || block.data.buttonVariant === undefined,
+                        'btn-outline-primary': block.data.buttonVariant === 'Secondary'
+                    }" role="button" ng-if="block.data.link[0].name">{{block.data.link[0].name}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models
+@{
+    var imageCropAnchor = ImageCropAnchor.Center;
+    Enum.TryParse(ViewData["imageCropAnchor"]?.ToString(), out imageCropAnchor);
+
+    var design = ViewData["Design"] as Design;
+    var settings = ViewData["Settings"] as Settings;
+
+    var logo = design?.Logo;
+    var logoHover = design?.LogoHover;
+
+    if (logo != null)
+    {
+        var logoAltText = logo.Value<string>("altText");
+        if (string.IsNullOrWhiteSpace(logoAltText))
+        {
+            if (!string.IsNullOrWhiteSpace(settings?.WebsiteName))
+            {
+                logoAltText = settings?.WebsiteName;
+            }
+            else
+            {
+                logoAltText = logo.Name;
+            }
+        }
+
+        if (design?.UseCrop?.Contains("Use crop for Logo") ?? false)
+        {
+            <img class="logo-default" src="@logo.GetCropUrl(cropAlias: "logo", urlMode: UrlMode.Default)" alt="@logoAltText" />
+        }
+        else
+        {
+            <img class="logo-default" style="max-height: 46px; max-width: 98px" src="@logo.GetCropUrl(imageCropMode: ImageCropMode.Pad, imageCropAnchor: imageCropAnchor, furtherOptions: "&format=png&bgcolor=transparent")" alt="@logoAltText" />
+        }
+        if (logoHover != null)
+        {
+            var logoHoverAltText = logoHover.Value<string>("altText");
+            if (string.IsNullOrWhiteSpace(logoHoverAltText))
+            {
+                if (!string.IsNullOrWhiteSpace(settings?.WebsiteName))
+                {
+                    logoHoverAltText = settings?.WebsiteName;
+                }
+                else
+                {
+                    logoHoverAltText = logoHover.Name;
+                }
+            }
+
+            if (design?.UseCrop?.Contains("Use crop for Logo Hover") ?? false)
+            {
+                <img class="logo-hover" src="@logoHover.GetCropUrl(cropAlias: "logo", urlMode: UrlMode.Default)" alt="@logoHoverAltText" />
+            }
+            else
+            {
+                <img class="logo-hover" style="max-height: 46px; max-width: 98px" src="@logoHover.GetCropUrl(imageCropMode: ImageCropMode.Pad, imageCropAnchor: imageCropAnchor, furtherOptions: "&format=png&bgcolor=transparent")" alt="@logoHoverAltText" />
+            }
+        }
+    }
+    else
+    {
+        @settings?.WebsiteName
+    }
+}

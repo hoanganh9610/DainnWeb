@@ -1,0 +1,16 @@
+<section ng-controller="layoutSectionsController" class="three-col-section" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor], 'background-image': 'url(' + (block.data.backgroundPicture[0].mediaKey | mediaItemResolver).mediaLink + '?rmode=min&width=1920)'}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" ng-class="{  
+           'pt-5 pt-md-7 pt-lg-8': !block.data.addMarginToTheTop || block.data.addMarginToTheTop == 1,  
+           'pt-0': block.data.addMarginToTheTop == 0,  
+           'pb-5 pb-md-7 pb-lg-8': !block.data.addMarginToTheBottom || block.data.addMarginToTheBottom == 1,  
+           'pb-0': block.data.addMarginToTheBottom == 0  
+         }">
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <umb-block-grid-render-area-slots></umb-block-grid-render-area-slots>
+</section>

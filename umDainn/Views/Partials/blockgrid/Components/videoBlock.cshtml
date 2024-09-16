@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<VideoBlock>>
+@{
+    var video = Model.Content.Video;
+    var poster = Model.Content.Poster;
+    if (video is not null)
+    {
+        <video class="image w-100 border-radius box-shadow-pictures-and-video" controls preload="metadata" src="@video.Url()" @(poster is not null ? Html.Raw($"poster=\"{poster.GetCropUrl()}\"") : string.Empty)>
+            Sorry, your browser doesn't support embedded videos, but don't worry, you can
+            <a href="@video.Url()">download it</a>
+            and watch it with your favorite video player!
+        </video>
+    }
+    else
+    {
+        <p>Missing video</p>
+    }
+}

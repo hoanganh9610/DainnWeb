@@ -1,0 +1,51 @@
+﻿<div ng-controller="typographyController" class="fonts-property-editor">
+    <div class="accordion" id="typography-accordion">
+        <div class="accordion-group" ng-repeat="setting in model.value track by $id(setting)">
+            <div class="accordion-heading">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" href="#typography-{{$index}}">
+                    <span ng-style="headingStyles[$index]">{{ setting.element | umbCmsTitleCase }}</span>
+                </a>
+            </div>
+            <div id="typography-{{$index}}" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div>
+                        <div class="row flex items-start">
+                            <div class="span4">
+                                <div class="colour-item">
+                                    <label for="typographyFont_{{$index}}" class="control-label">Font</label><br />
+                                    <select id="typographyFont_{{$index}}" name="typographyFont_{{$index}}" ng-options="font as (font.fontFamily + ', ' + font.fontCategory + ', ' + font.fontWeight + ', ' + font.fontStyle) for font in fonts track by font.guid" ng-model="setting.font"></select>
+                                </div>
+                                <div class="colour-item" ng-if="setting.element !== 'button'" ng-repeat="item in ['Desktop', 'Tablet', 'Mobile']">
+                                    <label for="typography{{item}}_{{$parent.$parent.$index}}-{{$index}}" class="control-label">{{item}}</label><br />
+                                    <div class="input-append">
+                                        <input fix-number id="typography{{item}}_{{$parent.$parent.$index}}-{{$index}}" type="number" min="8" max="{{setting.element === 'h1' ? 200 : 54}}" name="typography{{item}}_{{$parent.$parent.$index}}-{{$index}}" ng-model="setting[item.toLowerCase()]" /> <span class="add-on">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span8" style="background-color: #D9D9D9;">
+                                <div class="colour-body">
+                                    <div class="colour-content" style="background: #ffffff;" ng-style="setting.element !== 'button' ?
+                                            {'color': '#' + baselineColors.content[setting.element]} :
+                                            {'--bs-btn-color': '#' + baselineColors.button.text,
+                                             '--bs-btn-hover-color': '#' + baselineColors.button.textHover,
+                                             '--bs-btn-bg': '#' + baselineColors.button.fill,
+                                             '--bs-btn-hover-bg': '#' + baselineColors.button.fillHover,
+                                             '--bs-btn-border-color': '#' + baselineColors.button.stroke,
+                                             '--bs-btn-hover-border-color': '#' + baselineColors.button.strokeHover,
+                                             '--bs-btn-border-radius' : cornerRadius.buttons + 'px',
+                                             '--bs-border-radius-sm' : cornerRadius.buttons + 'px',
+                                             '--bs-border-radius-lg': cornerRadius.buttons + 'px'}">
+                                        <div ng-repeat="label in ['Desktop', 'Tablet', 'Mobile']">
+                                            <div class="preview-label">{{label}}</div>
+                                            <p ng-bind-html="previewTexts[setting.element] | safe_html" ng-style="previewStyles[$parent.$index][label.toLowerCase()]"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

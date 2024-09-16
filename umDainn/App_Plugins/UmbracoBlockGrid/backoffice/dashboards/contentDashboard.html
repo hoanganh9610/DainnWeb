@@ -1,0 +1,170 @@
+﻿<div class="welcome-dashboard" ng-controller="contentDashboardController">
+    <div class="flex-row mb-30" ng-style="{ 'flex-direction' : isMultisiteSetup ? 'row-reverse' : 'row' }">
+        <div ng-class="isMultisiteSetup ? 'col-4' : 'col-8'">
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <p>ByteEditor Site Builder</p>
+                </div>
+                <div class="block-body fw-medium">
+                    <p class="mb-1">To find out more information about the solution, please visit our website.</p>
+                    <a class="dashboard-button" label="{{selServerAnchor.hostname}}" href="{{selServerAnchor.href}}" target="_blank">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div ng-class="isMultisiteSetup ? 'col-8' : 'col-4'">
+            <div class="dashboard-block">
+                <div class="block-header">
+                    <p> License details</p>
+                </div>
+                <div class="block-body fw-medium">
+                    <div ng-if="!isMultisiteSetup" style="position: relative">
+                        <uui-loader ng-if="isLoaderShown"></uui-loader>
+                        <div ng-if="isSubmitted" style="text-align: center; line-height: 1.5em;">
+                            <div ng-if="license.IsTrial && license.IsValid">
+                                Your trial has been activated! The trial period expires in {{daysLeft}}&nbsp;{{daysLeft == 1 ? 'day' : 'days'}}!
+                            </div>
+                            <div ng-if="license.IsTrial && !license.IsValid">
+                                Your trial has expired, please visit <uui-button look="primary" label="{{selServerAnchor.hostname}}" href="{{selServerAnchor.href}}subscriptions/checkout/?email={{license.Email}}" target="_blank">{{selServerAnchor.hostname}}</uui-button> website to purchase the subscription.
+                            </div>
+                            <div ng-if="!license.IsTrial && license.IsValid">
+                                You are currently using a full version of the ByteEditor.<br />
+                                Your license will remain active for another {{daysLeft}}&nbsp;{{daysLeft == 1 ? 'day' : 'days'}}.<br />
+                            </div>
+                            <div ng-if="!license.IsTrial && !license.IsValid">
+                                Your license is not valid.<br />
+                                You can purchase a new license at any time by visiting our website to make your purchase.<br /><br />
+                                <uui-button look="primary" label="{{selServerAnchor.hostname}}" href="{{selServerAnchor.href}}subscriptions/checkout/?email={{license.Email}}" target="_blank">{{selServerAnchor.hostname}}</uui-button>
+                            </div>
+                        </div>
+                        <p ng-if="!isSubmitted">
+                            Welcome to ByteEditor! Try out the product to activate the trial.
+                        </p>
+                    </div>
+                    <div ng-if="isMultisiteSetup" style="position: relative; height: 100%;">
+                        <uui-loader ng-if="isSubscriptionsLoaderShown"></uui-loader>
+                        <table ng-if="subscriptions.length > 0" class="table table-hover">
+                            <thead>
+                                <tr style="background: #f1f4fe">
+                                    <th>Website Name</th>
+                                    <th>Domain</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="subscription in subscriptions"
+                                    ng-style="{'background-color': ($index % 2 === 1) ? '#f1f4fe' : 'transparent'}">
+                                    <td><a href="/umbraco#/content/content/edit/{{subscription.NodeId}}">{{subscription.Template}}</a></td>
+                                    <td><a href="https://{{subscription.Domains}}" target="_blank">{{subscription.Domains}}</a></td>
+                                    <td>{{getSubscriptionStatus(subscription)}}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a ng-if="subscriptions.length > 0"
+                           class="dashboard-button" href="/umbraco/backoffice/api/ManageSitesApi/GoToCustomerPortal">Manage Subscriptions</a>
+                        <p ng-if="subscriptions.length == 0">You don't have any subscriptions yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-row">
+        <div class="col-8">
+            <div class="dashboard-block">
+                <div class="block-body big-paddings">
+                    <div class="flex-row small-gutter mb-30">
+                        <div class="col-4">
+                            <div class="f-block">
+                                <p class="block-title">True visual designer</p>
+                                <p class="block-text">
+                                    Live drag-and-drop editor without any coding
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="f-block">
+                                <p class="block-title">35+ elements gallery</p>
+                                <p class="block-text">
+                                    Collection of design elements specially adapted for your websites
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="f-block">
+                                <p class="block-title">1 day to build a website</p>
+                                <p class="block-text">
+                                    User-friendly interface with easy-to-learn philosophy
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-block tc-block-1">
+                        <div class="flex-row">
+                            <div class="col-6">
+                                <img src="/App_Plugins/UmbracoBlockGrid/backoffice/dashboards/imgs/block-01.svg" alt="...">
+                            </div>
+                            <div class="col-6">
+                                <p>Starter kit is fully customizable to meet your unique design approach</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tc-block tc-block-2">
+                        <div class="flex-row">
+                            <div class="col-6">
+                                <p>Packed with pre-built templates to showcase your product offerings</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="/App_Plugins/UmbracoBlockGrid/backoffice/dashboards/imgs/block-02.svg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="dashboard-block mb-30">
+                <div class="block-header">
+                    <p>ByteEditor Tours</p>
+                </div>
+                <div class="block-body fw-medium">
+                    <div style="position: relative">
+                        <!-- Tours -->
+                        <div class="umb-help-section" ng-if="tours.length > 0">
+                            <div ng-repeat="tourGroup in tours | orderBy:'groupOrder'">
+                                <div class="umb-help-list">
+                                    <button type="button" class="umb-help-list-item umb-help-list-item__content flex items-center justify-between" ng-click="tourGroup.open = !tourGroup.open" aria-expanded="{{tourGroup.open === undefined ? false : tourGroup.open }}">
+                                        <span class="umb-help-list-item__group-title bold">
+                                            <umb-icon icon="{{tourGroup.open ? 'icon-navigation-down' : 'icon-navigation-right'}}"></umb-icon>
+                                            <span ng-if="tourGroup.group !== 'undefined'">{{tourGroup.group}}</span>
+                                            <span ng-if="tourGroup.group === 'undefined'">
+                                                <localize key="general_other">Other</localize>
+                                            </span>
+                                        </span>
+                                        <umb-progress-circle percentage="{{tourGroup.completedPercentage}}" size="40">
+                                        </umb-progress-circle>
+                                    </button>
+                                    <div ng-if="tourGroup.open">
+                                        <div data-element="tour-{{tour.alias}}" class="umb-help-list-item" ng-repeat="tour in tourGroup.tours">
+                                            <div class="umb-help-list-item__content justify-between">
+                                                <div class="flex items-center">
+                                                    <div ng-if="!tour.completed" class="umb-number-badge umb-number-badge--xs umb-help-list-item__icon">{{ $index + 1 }}</div>
+                                                    <umb-checkmark ng-if="tour.completed" size="xs" checked="tour.completed" class="umb-help-list-item__icon"></umb-checkmark>
+                                                    <span ng-class="{'strike': tour.completed}" class="umb-help-list-item__title">{{ tour.name }}</span>
+                                                </div>
+                                                <div>
+                                                    <umb-button ng-if="!tour.completed && showTourButton($index, tourGroup)" button-style="primary" type="button" label="Start" action="startTour(tour)"></umb-button>
+                                                    <umb-button ng-if="tour.completed" type="button" label="Rerun" action="startTour(tour)"></umb-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

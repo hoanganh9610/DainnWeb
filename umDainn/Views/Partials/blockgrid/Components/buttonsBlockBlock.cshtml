@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ButtonsBlockBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var primaryLink = Model.Content.PrimaryLink;
+    var secondaryLink = Model.Content.SecondaryLink;
+    if (primaryLink is null || secondaryLink is null)
+    {
+        return;
+    }
+    var alignmentClass = Model.Content.HorizontalAlignment == "Right" ?
+    "justify-content-end" : (Model.Content.HorizontalAlignment == "Center" ? "justify-content-center" : string.Empty);
+}
+<div class="d-flex @alignmentClass">
+    <a class="btn btn-primary mt-2 me-2 @(Model.Content.Size == "Large" ? "btn-lg" : Model.Content.Size == "Small" ? "btn-sm" : "")" href="@primaryLink.Url" target="@primaryLink.Target">@primaryLink.Name</a>
+    <a class="btn btn-outline-primary mt-2 @(Model.Content.Size == "Large" ? "btn-lg" : Model.Content.Size == "Small" ? "btn-sm" : "")" href="@secondaryLink.Url" target="@secondaryLink.Target">@secondaryLink.Name</a>
+</div>

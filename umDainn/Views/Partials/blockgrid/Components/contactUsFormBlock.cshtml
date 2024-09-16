@@ -1,0 +1,11 @@
+﻿@using PageBuilder.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<ContactUsFormBlock>>
+
+<div>
+    @await Html.PartialAsync("blockgrid/contactUsForm",
+            new ContactUsFormModel
+    {
+        FormName = Model.Content.FormName ?? string.Empty,
+        SiteId = Umbraco.AssignedContentItem.Root().Key
+    })
+</div>

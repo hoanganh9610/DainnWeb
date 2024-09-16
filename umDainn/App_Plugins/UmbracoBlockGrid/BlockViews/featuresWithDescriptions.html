@@ -1,0 +1,36 @@
+<div class="features-with-descriptions py-8 py-md-10" ng-class="{'with-bg':  block.data.backgroundColor != null}" ng-controller="featuresWithDescriptionsBlockController" ng-focus="block.focus" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-nobackgroundcolor="{{block.data.backgroundColor === '' || undefined}}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}" data-bs-theme="light">
+	<style ng-bind="styles"></style>
+	<div class="container">
+		<div class="mw-xl mx-auto mw-lg-none">
+			<h2 class="h2 mb-6">{{block.data.title}}</h2>
+			<div class="row">
+				<div class="col-12 col-lg-6 mb-12 mb-lg-0">
+					<div class="mw-lg">
+						<div class="accordion" id="accordionBlock">
+							<div class="accordion-item border-bottom mb-0" ng-repeat="item in block.data.items.contentData" ng-style="{'--bs-border-color': '#' + selectedBackground[block.data.dividerColor]}">
+								<p class="accordion-header position-relative">
+									<span class="accordion-button d-flex w-100 justify-content-between align-items-center border-none shadow-none py-5 px-0" ng-class="{'collapsed': getCurrentIndex(block.data.udi) === null ? $index !== 0 : $index != getCurrentIndex(block.data.udi)}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $index }}" aria-expanded="{{ getCurrentIndex(block.data.udi) === null ? $index === 0 : $index == getCurrentIndex(block.data.udi) }}" aria-controls="collapse-{{ $index }}" ng-click="toggleCurrentCollapse($event, block.data.udi, $index)">
+										<span class="h4 mb-0">{{item.headline}}</span>
+										<span class="accordion-arrow position-relative" style="width: 26px; height: 26px;">
+											<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path d="M19.4961 10.4346L12.9483 3.88682L6.40058 10.4346" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+												<path d="M12.9453 22.2246L12.9453 4.06996" stroke="currentColor" stroke-width="1.61806" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+											</svg>
+										</span>
+									</span>
+								</p>
+								<div id="collapse-{{ $index }}" class="accordion-collapse collapse" ng-class="{'show': getCurrentIndex(block.data.udi) === null ? $index === 0 : $index == getCurrentIndex(block.data.udi)}" aria-labelledby="heading-{{ $index }}" data-bs-parent="#accordionBlock">
+									<div class="accordion-body lead-lg px-0" ng-bind-html="item.richText.markup | safe_html"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-lg-6">
+					{{mediaItem = (block.data.image[0].mediaKey | mediaItemResolver); ""}}
+					<img class="img-fluid d-block mx-auto me-lg-0 border-radius" ng-src="{{mediaItem.mediaLink}}" alt="...">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

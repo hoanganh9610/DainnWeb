@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockGridItem<CallToActionBlock>>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var link = Model.Content.Link;
+    if (link is null)
+    {
+        return;
+    }
+    var alignmentClass = Model.Content.HorizontalAlignment == "Right" ?
+    "justify-content-center justify-content-lg-end" : (Model.Content.HorizontalAlignment == "Center" ?
+    "justify-content-center" : (Model.Content.HorizontalAlignment == "Left" ?
+    "justify-content-center justify-content-lg-start" : string.Empty));
+}
+<div class="d-flex @alignmentClass">
+    <a class="btn @(Model.Content.Variant == "Secondary" ? "btn-outline-primary" : "btn-primary") mt-2 @(Model.Content.Size == "Large" ? "btn-lg" : Model.Content.Size == "Small" ? "btn-sm" : "")" href="@link.Url" target="@link.Target">@link.Name</a>
+</div>

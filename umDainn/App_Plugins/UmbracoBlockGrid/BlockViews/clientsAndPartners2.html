@@ -1,0 +1,22 @@
+<section class="section-clients style-2 overflow-x-hidden" ng-class="{'animated': block.data.logos.length > 6}" ng-controller="clientsAndPartnersBlockController" ng-click="block.edit()" ng-focus="block.focus" ng-style="{'background-color': '#' + selectedBackground[block.data.backgroundColor]}" ng-attr-bright-contrast="{{block.data.contrast.value === 'ffffff' || undefined}}">
+    <div class="license-message" ng-if="!licenseIsValid">
+        <div class="license-block">
+            <div class="img-holder">
+                <img src="/App_Plugins/UmbracoBlockGrid/GlobalDesign/img/icon-calendar.svg" alt="...">
+            </div>
+            <div ng-bind-html="message | safe_html" class="content-holder"></div>
+        </div>
+    </div>
+    <style ng-bind="styles"></style>
+    <div class="container">
+        <h2 class="h2 text-center mb-4  mb-lg-7">{{block.data.title}}</h2>
+    </div>
+    <div class="container-scroller">
+        <div class="item-holder" ng-repeat="logo in block.data.logos">
+            <img ng-src="{{(logo.mediaKey | mediaItemResolver).mediaLink}}?rmode=min&width=160" width="160" height="64" class="object-fit-contain" />
+        </div>
+        <div ng-if="block.data.logos.length > 6" class="item-holder" ng-repeat="logo in block.data.logos">
+            <img ng-src="{{(logo.mediaKey | mediaItemResolver).mediaLink}}?rmode=min&width=160" width="160" height="64" class="object-fit-contain" aria-hidden="true" />
+        </div>
+    </div>
+</section>
