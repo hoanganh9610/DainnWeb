@@ -1,3 +1,4 @@
+using System.IO;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -8,6 +9,11 @@ builder.CreateUmbracoBuilder()
     .Build();
 
 WebApplication app = builder.Build();
+var mediaPath = Path.Combine(app.Environment.WebRootPath, "media");
+if (!Directory.Exists(mediaPath))
+{
+    Directory.CreateDirectory(mediaPath);
+}
 
 await app.BootUmbracoAsync();
 
