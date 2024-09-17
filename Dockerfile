@@ -4,6 +4,9 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+# Set environment variable for ASP.NET Core URLs
+ENV ASPNETCORE_URLS=http://*:8080;https://*:8081
+
 # Use the SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
